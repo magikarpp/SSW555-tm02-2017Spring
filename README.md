@@ -1,2 +1,2 @@
-# SWW555-Agile-Methods-for-Software-Dev.
+# SSW555-tm02-2017Spring
 Team: Benjamin C, Jaemin S, Kushali D
