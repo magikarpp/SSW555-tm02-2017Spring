@@ -1,0 +1,5 @@
+#eclipse garbage
+.classpath
+.project
+bin/.gitignore
+src/*.class
