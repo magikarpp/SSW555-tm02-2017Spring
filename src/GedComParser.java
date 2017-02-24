@@ -154,7 +154,6 @@ public class GedComParser {
 	}
 
 	private static Individual getIndividual(Properties props) {
-		
 		Individual indi = new Individual();
 		Enumeration<?> e = props.propertyNames();
 	    while (e.hasMoreElements()) {
@@ -220,7 +219,7 @@ public class GedComParser {
 	}
 	
 	//updated display
-	private static void getDisplay(){
+	private static void getDisplay() throws Exception{
 		SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd");
 		System.out.println("Individuals");
 		Field [] fields = Individual.class.getDeclaredFields();
@@ -228,6 +227,7 @@ public class GedComParser {
 			System.out.print(field.getName()+"\t\t\t");
 		}
 		for(Individual indi :individuals.values()){
+			indi.checkDates();
 			String indent = "";
 			System.out.println();
 			System.out.print(indi.getId()+"\t\t");
@@ -270,6 +270,7 @@ public class GedComParser {
 		}
 		
 		for(Family fam :families.values()){
+			fam.checkDates();
 			String indent = "";
 			System.out.println();
 			System.out.print(fam.getId()+"\t\t");

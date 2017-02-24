@@ -10,6 +10,25 @@ public class Family {
 	private Individual Husband;
 	private Individual Wife;
 	private ArrayList<Individual> Children;
+	
+	public void checkDates() throws Exception{
+		Date rn = new Date();
+		
+		if(Married != null){
+			if(Married.compareTo(rn) > 0){
+				System.out.println("");
+				throw new java.lang.Exception("Married is past current date.");
+			}
+		}
+	
+		if(Divorced != null){
+			if(Divorced.compareTo(rn) > 0){
+				System.out.println("");
+				throw new java.lang.Exception("Divorced is past current date.");
+			}
+		}
+	}
+	
 	public String getId() {
 		return ID;
 	}
