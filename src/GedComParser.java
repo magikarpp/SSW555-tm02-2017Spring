@@ -236,6 +236,7 @@ public class GedComParser {
 				indent += "\t";
 			}
 			System.out.print(indi.getName()+"\t"+indent);
+			indent = "";
 			System.out.print(indi.getGender()+"\t\t\t");
 			System.out.print(formattedDate.format(indi.getBirthDate())+"\t\t\t");
 			System.out.print(indi.getAge()+"\t\t\t");
@@ -295,6 +296,7 @@ public class GedComParser {
 				indent += "\t";
 			}
 			System.out.print(wife.getId()+"\t\t"+wife.getName()+"\t"+indent);
+			indent = "";
 			if(fam.getChildren()!=null){
 				List<Individual> children = fam.getChildren();
 				for(Individual child :children ){
