@@ -219,6 +219,7 @@ public class GedComParser {
 		return tags;
 	}
 	
+	//updated display
 	private static void getDisplay(){
 		SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd");
 		System.out.println("Individuals");
