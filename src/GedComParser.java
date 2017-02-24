@@ -224,22 +224,27 @@ public class GedComParser {
 		System.out.println("Individuals");
 		Field [] fields = Individual.class.getDeclaredFields();
 		for(Field field : fields){
-			System.out.print(field.getName()+"\t\t");
+			System.out.print(field.getName()+"\t\t\t");
 		}
 		for(Individual indi :individuals.values()){
+			String indent = "";
 			System.out.println();
 			System.out.print(indi.getId()+"\t\t");
-			System.out.print(indi.getName()+"\t\t");
-			System.out.print(indi.getGender()+"\t\t");
-			System.out.print(formattedDate.format(indi.getBirthDate())+"\t");
-			System.out.print(indi.getAge()+"\t");
-			System.out.print(indi.isAlive()+"\t");
-			if(indi.getDeathDate()==null){
-				System.out.print("NA \t");
-			}else{
-				System.out.print(formattedDate.format(indi.getDeathDate()));
+			int total = (int) Math.ceil((double)15/indi.getName().length());
+			for(int i = 0; i < total; i++){
+				indent += "\t";
 			}
-			System.out.print(indi.getChild()+"\t");
+			System.out.print(indi.getName()+"\t"+indent);
+			System.out.print(indi.getGender()+"\t\t\t");
+			System.out.print(formattedDate.format(indi.getBirthDate())+"\t\t\t");
+			System.out.print(indi.getAge()+"\t\t\t");
+			System.out.print(indi.isAlive()+"\t\t\t");
+			if(indi.getDeathDate()==null){
+				System.out.print("NA \t\t\t");
+			}else{
+				System.out.print(formattedDate.format(indi.getDeathDate())+"\t\t");
+			}
+			System.out.print(indi.getChild()+"\t\t\t");
 			System.out.print(indi.getSpouse()+"\t");
 			
 			
@@ -250,32 +255,45 @@ public class GedComParser {
 		
 		for(Field field : famfields){
 			if(field.getName().equals("Husband")){
-				System.out.print("HusbandID \t HusbandName \t");
+				System.out.print("HusbandID \t\t HusbandName \t\t\t");
 			}else if(field.getName().equals("Wife")){
-				System.out.print("WifeID \t WifeName \t");
+				System.out.print("WifeID \t\t WifeName \t\t\t");
+			}else if(field.getName().equals("Divorced")){
+				System.out.print("Divorced \t\t");
+			}else if(field.getName().equals("ID")){
+				System.out.print("ID \t\t");
 			}else
-			System.out.print(field.getName()+"\t");
+			System.out.print(field.getName()+"\t\t\t");
 			
 		}
 		
 		for(Family fam :families.values()){
+			String indent = "";
 			System.out.println();
-			System.out.print(fam.getId()+"\t");
+			System.out.print(fam.getId()+"\t\t");
 			if(fam.getMarrDate()==null){
-				System.out.print("NA \t");
+				System.out.print("NA \t\t\t");
 			}else{
-				System.out.print(formattedDate.format(fam.getMarrDate())+" ");
+				System.out.print(formattedDate.format(fam.getMarrDate())+"\t\t");
 			}
 			if(fam.getDivorceDate()==null){
-				System.out.print("NA \t");
+				System.out.print("NA \t\t\t");
 			}else{
-				System.out.print(formattedDate.format(fam.getDivorceDate())+"\t");
+				System.out.print(formattedDate.format(fam.getDivorceDate())+"\t\t");
 			}
 			Individual husb = fam.getHusband();
-			System.out.print(husb.getId()+"\t"+husb.getName()+"\t");
-			
+			int total = (int) Math.ceil((double)15/husb.getName().length());
+			for(int i = 0; i < total; i++){
+				indent += "\t";
+			}
+			System.out.print(husb.getId()+"\t\t\t"+husb.getName()+"\t"+indent);
+			indent = "";
 			Individual wife = fam.getWife();
-			System.out.print(wife.getId()+"\t"+wife.getName()+"\t");
+			total = (int) Math.ceil((double)15/wife.getName().length());
+			for(int i = 0; i < total; i++){
+				indent += "\t";
+			}
+			System.out.print(wife.getId()+"\t\t"+wife.getName()+"\t"+indent);
 			if(fam.getChildren()!=null){
 				List<Individual> children = fam.getChildren();
 				for(Individual child :children ){
