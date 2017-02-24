@@ -14,6 +14,7 @@ public class Individual {
 	
 	public void checkDates() throws Exception{
 		Date rn = new Date();
+		
 		if(Birthday.compareTo(rn) > 0){
 			System.out.println("");
 			throw new java.lang.Exception("Birthday is past current date.");

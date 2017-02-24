@@ -27,6 +27,18 @@ public class Family {
 				throw new java.lang.Exception("Divorced is past current date.");
 			}
 		}
+		
+		if(Married != null){
+			if(Married.compareTo(Husband.getBirthDate()) < 0){
+				System.out.println("");
+				throw new java.lang.Exception("Birthdate of Husband is after Marriage");
+			}
+			if(Married.compareTo(Wife.getBirthDate()) < 0){
+				System.out.println("");
+				throw new java.lang.Exception("Birthdate of Wife is after Marriage");
+			}
+		}
+	
 	}
 	
 	public String getId() {
