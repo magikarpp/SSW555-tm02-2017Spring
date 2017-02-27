@@ -228,7 +228,7 @@ public class GedComParser {
 			System.out.print(field.getName()+"\t\t\t");
 		}
 		for(Individual indi :individuals.values()){
-			indi.checkDates();
+			//indi.checkDates();
 			String indent = "";
 			System.out.println();
 			System.out.print(indi.getId()+"\t\t");
@@ -271,7 +271,7 @@ public class GedComParser {
 		}
 		
 		for(Family fam :families.values()){
-			fam.checkDates();
+			//fam.checkDates();
 			String indent = "";
 			System.out.println();
 			System.out.print(fam.getId()+"\t\t");

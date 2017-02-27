@@ -13,22 +13,6 @@ public class Individual {
 	private String Child;
 	private String Spouse;
 	
-	public void checkDates() throws Exception{
-		Date rn = new Date();
-		
-		if(Birthday.compareTo(rn) > 0){
-			System.out.println("");
-			throw new java.lang.Exception("Birthday is past current date.");
-		}
-
-		if(Death != null){
-			if(Death.compareTo(rn) > 0){
-			System.out.println("");
-			throw new java.lang.Exception("Death is past current date.");
-			}
-		}
-	}
-	
 	public String getId() {
 		return ID;
 	}
