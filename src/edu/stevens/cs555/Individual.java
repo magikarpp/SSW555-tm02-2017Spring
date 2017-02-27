@@ -1,3 +1,4 @@
+package edu.stevens.cs555;
 import java.util.Date;
 
 public class Individual {
