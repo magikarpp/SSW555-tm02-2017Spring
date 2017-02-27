@@ -26,6 +26,7 @@ public class TestCaseforDates {
 		fam.setDivorceDate(new Date());
 		assertTrue(Validate.noNulls(fam.getDivorceDate()));
 	}
+	
 	@Test
 	public void testDateNull(){
 		assertFalse(Validate.noNulls(fam.getDivorceDate()));
