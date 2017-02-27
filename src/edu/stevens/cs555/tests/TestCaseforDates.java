@@ -22,7 +22,6 @@ public class TestCaseforDates {
 	
 	@Test
 	public void testDateNotNull() {
-		
 		fam.setDivorceDate(new Date());
 		assertTrue(Validate.noNulls(fam.getDivorceDate()));
 	}
@@ -30,6 +29,59 @@ public class TestCaseforDates {
 	@Test
 	public void testDateNull(){
 		assertFalse(Validate.noNulls(fam.getDivorceDate()));
+	}
+	
+	//USO1 TestCase
+	@Test
+	public void testDatesAfterCurrentDate(){
+		String birth = "3048-NOV-11";
+		String death = "3048-NOV-11";
+		String marriage = "3048-NOV-11";
+		String divorce = "3048-NOV-11";
+		
+		try{
+			indo.setBirthDate(dt.parse(birth));
+			indo.setBirthDate(dt.parse(death));
+			fam.setMarrDate(dt.parse(marriage));
+			fam.setDivorceDate(dt.parse(divorce));
+		} catch (ParseException e){
+			e.printStackTrace();
+		}
+		
+		assertFalse(ValidateDates.isMarrBeforeCurrent(fam));
+		assertFalse(ValidateDates.isDivBeforeCurrent(fam));
+		assertFalse(ValidateDates.isBirthBeforeCurrent(indo));
+		assertFalse(ValidateDates.isDeathBeforeCurrent(indo));
+	}
+	
+	@Test
+	public void testBirthMarriageSameDay(){
+		String birth="2010-DEC-16";
+		String marriage ="2010-DEC-16";
+		try {
+			fam.getHusband().setBirthDate(dt.parse(birth));
+			fam.getWife().setBirthDate(dt.parse(birth));
+			fam.setMarrDate(dt.parse(marriage));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertTrue(ValidateDates.isMarrAfterBirth(fam));
+	}
+	
+	@Test
+	public void testBirthAfterMarriage(){
+		String birth="2010-DEC-20";
+		String marriage ="2010-DEC-16";
+		try {
+			fam.getHusband().setBirthDate(dt.parse(birth));
+			fam.getWife().setBirthDate(dt.parse(birth));
+			fam.setMarrDate(dt.parse(marriage));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertFalse(ValidateDates.isMarrAfterBirth(fam));
 	}
 	
 	@Test
