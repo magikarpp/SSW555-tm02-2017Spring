@@ -18,6 +18,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import edu.stevens.cs555.utils.ValidateDates;
+
 public class GedComParser {	
 	
 	private static HashMap<String,Individual> individuals = new HashMap<String,Individual>();
@@ -220,7 +222,7 @@ public class GedComParser {
 	}
 	
 	//updated display
-	private static void getDisplay() throws Exception{
+	private static void getDisplay(){
 		SimpleDateFormat formattedDate = new SimpleDateFormat("yyyy-MM-dd");
 		System.out.println("Individuals");
 		Field [] fields = Individual.class.getDeclaredFields();
@@ -308,7 +310,9 @@ public class GedComParser {
 				System.out.print("NA \t");
 			}
 		}
-		
+		System.out.println();
+		System.out.println();
+		ValidateDates.validateIndividualAndFamily(individuals, families);
 	}
 
 }

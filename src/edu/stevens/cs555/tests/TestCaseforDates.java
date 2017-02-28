@@ -83,7 +83,7 @@ public class TestCaseforDates {
 		}
 		assertFalse(ValidateDates.isMarrAfterBirth(fam));
 	}
-	
+	//USO3 TestCase
 	@Test
 	public void testBirthDeathSameDay(){
 		String birth="2016-OCT-25";
@@ -126,5 +126,5 @@ public class TestCaseforDates {
 		assertTrue(ValidateDates.isBirthBeforeDeath(indo));
 		
 	}
-
+	
 }
