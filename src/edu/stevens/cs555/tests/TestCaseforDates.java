@@ -19,6 +19,11 @@ public class TestCaseforDates {
 	Individual indo = new Individual();
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 	
+	public TestCaseforDates(){
+		fam.setId("F20");
+		indo.setId("I12");
+	}
+	
 	
 	@Test
 	public void testDateNotNull() {
@@ -125,6 +130,42 @@ public class TestCaseforDates {
 		}
 		assertTrue(ValidateDates.isBirthBeforeDeath(indo));
 		
+	}
+	//US04 TestCase
+	@Test
+	public void testDivorceBeforeMarr(){
+		String marriage="2016-AUG-10";
+		String divorce ="2016-JAN-13";
+		try{
+			fam.setMarrDate(dt.parse(marriage));
+			fam.setDivorceDate(dt.parse(divorce));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		assertFalse(ValidateDates.isMarriageBeforeDivorce(fam));
+	}
+	@Test
+	public void testNoMarrDivor(){
+		String divorce ="2016-JAN-13";
+		try{
+			fam.setDivorceDate(dt.parse(divorce));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		assertFalse(ValidateDates.isMarriageBeforeDivorce(fam));
+	}
+	@Test
+	public void testMarrBeforeDivorce(){
+		
+			String marriage="2016-AUG-10";
+			String divorce ="2017-JAN-24";
+			try{
+				fam.setMarrDate(dt.parse(marriage));
+				fam.setDivorceDate(dt.parse(divorce));
+			}catch(ParseException e) {
+				e.printStackTrace();
+			}
+			assertTrue(ValidateDates.isMarriageBeforeDivorce(fam));
 	}
 	
 }
