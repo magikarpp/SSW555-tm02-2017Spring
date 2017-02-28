@@ -55,11 +55,11 @@ public class ValidateDates {
 		Date rn = new Date();
 		
 		if(Validate.noNulls(fam.getMarrDate())){
-			if(fam.getMarrDate().compareTo(fam.getHusband().getBirthDate()) < 0){
+			if(fam.getMarrDate().compareTo(fam.getHusband().getBirthDate()) < 1){
 				LOGGER.log(Level.SEVERE,"FAMILY: US02: Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate()) + " after husband's " + "(" + fam.getHusband().getId() + ") " + "birth on " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getHusband().getBirthDate()));
 				return false;
 			}
-			if(fam.getMarrDate().compareTo(fam.getWife().getBirthDate()) < 0){
+			if(fam.getMarrDate().compareTo(fam.getWife().getBirthDate()) < 1){
 				LOGGER.log(Level.SEVERE,"FAMILY: US02: Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate()) + " after wife's " + "(" + fam.getWife().getId() + ") " + "birth on " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getWife().getBirthDate()));
 				return false;
 			}

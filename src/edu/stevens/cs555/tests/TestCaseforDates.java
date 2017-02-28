@@ -38,25 +38,55 @@ public class TestCaseforDates {
 	
 	//USO1 TestCase
 	@Test
-	public void testDatesAfterCurrentDate(){
+	public void testBirthAfterCurrentDate(){
 		String birth = "3048-NOV-11";
-		String death = "3048-NOV-11";
-		String marriage = "3048-NOV-11";
-		String divorce = "3048-NOV-11";
 		
 		try{
 			indo.setBirthDate(dt.parse(birth));
-			indo.setBirthDate(dt.parse(death));
+		} catch (ParseException e){
+			e.printStackTrace();
+		}
+		
+		assertFalse(ValidateDates.isBirthBeforeCurrent(indo));
+	}
+	
+	@Test
+	public void testDeathAfterCurrentDate(){
+		String death = "3048-NOV-11";
+		
+		try{
+			indo.setDeathDate(dt.parse(death));
+		} catch (ParseException e){
+			e.printStackTrace();
+		}
+		
+		assertFalse(ValidateDates.isDeathBeforeCurrent(indo));
+	}
+	
+	@Test
+	public void testMarrAfterCurrentDate(){
+		String marriage = "3048-NOV-11";
+		
+		try{
 			fam.setMarrDate(dt.parse(marriage));
-			fam.setDivorceDate(dt.parse(divorce));
 		} catch (ParseException e){
 			e.printStackTrace();
 		}
 		
 		assertFalse(ValidateDates.isMarrBeforeCurrent(fam));
+	}
+	
+	@Test
+	public void testDivAfterCurrentDate(){
+		String divorce = "3048-NOV-11";
+		
+		try{
+			fam.setMarrDate(dt.parse(divorce));
+		} catch (ParseException e){
+			e.printStackTrace();
+		}
+		
 		assertFalse(ValidateDates.isDivBeforeCurrent(fam));
-		assertFalse(ValidateDates.isBirthBeforeCurrent(indo));
-		assertFalse(ValidateDates.isDeathBeforeCurrent(indo));
 	}
 	
 	@Test
