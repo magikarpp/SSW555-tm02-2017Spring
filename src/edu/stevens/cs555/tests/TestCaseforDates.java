@@ -118,6 +118,7 @@ public class TestCaseforDates {
 		}
 		assertFalse(ValidateDates.isMarrAfterBirth(fam));
 	}
+	
 	//USO3 TestCase
 	@Test
 	public void testBirthDeathSameDay(){
@@ -184,18 +185,53 @@ public class TestCaseforDates {
 		}
 		assertFalse(ValidateDates.isMarriageBeforeDivorce(fam));
 	}
+	
 	@Test
 	public void testMarrBeforeDivorce(){
 		
-			String marriage="2016-AUG-10";
-			String divorce ="2017-JAN-24";
-			try{
-				fam.setMarrDate(dt.parse(marriage));
-				fam.setDivorceDate(dt.parse(divorce));
-			}catch(ParseException e) {
-				e.printStackTrace();
-			}
-			assertTrue(ValidateDates.isMarriageBeforeDivorce(fam));
+		String marriage="2016-AUG-10";
+		String divorce ="2017-JAN-24";
+		try{
+			fam.setMarrDate(dt.parse(marriage));
+			fam.setDivorceDate(dt.parse(divorce));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		assertTrue(ValidateDates.isMarriageBeforeDivorce(fam));
+	}
+	
+	//US05 TestCase
+	@Test
+	public void testMarrBeforeDeath(){
+		String marriage= "2016-AUG-10";
+		String death1 = "2014-JAN-24";
+		String death2 = "2018-FEB-18";
+		
+		try{
+			fam.setMarrDate(dt.parse(marriage));
+			fam.getHusband().setDeathDate(dt.parse(death1));
+			fam.getWife().setDeathDate(dt.parse(death2));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		assertFalse(ValidateDates.isMarriageBeforeDeath(fam));
+	}
+	
+	//US06 TestCase
+	@Test
+	public void testDivBeforeDeath(){
+		String divorce= "2016-AUG-10";
+		String death1 = "2014-JAN-24";
+		String death2 = "2018-FEB-18";
+		
+		try{
+			fam.setDivorceDate(dt.parse(divorce));
+			fam.getHusband().setDeathDate(dt.parse(death1));
+			fam.getWife().setDeathDate(dt.parse(death2));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		assertFalse(ValidateDates.isDivorceBeforeDeath(fam));
 	}
 	
 }

@@ -13,21 +13,26 @@ import edu.stevens.cs555.Individual;
 
 public class ValidateDates {
 	
-	 private static final Logger LOGGER = Logger.getLogger(ValidateDates.class.getName());
-	 
+	private static final Logger LOGGER = Logger.getLogger(ValidateDates.class.getName());
 	 
 	public static void validateFamilyDates(Family fam) throws Exception{
-
+		
+		//US01
 		isMarrBeforeCurrent(fam);
 		isDivBeforeCurrent(fam);
+		//US02
 		isMarrAfterBirth(fam);
+		//US04
 		isMarriageBeforeDivorce(fam);
+		//US05
+		isMarriageBeforeDeath(fam);
+		//US06
+		isDivorceBeforeDeath(fam);
 		
 	}
 	
 	//US01
 	public static boolean isMarrBeforeCurrent(Family fam){
-		
 		Date rn = new Date();
 		
 		if(Validate.noNulls(fam.getMarrDate())){
@@ -65,26 +70,69 @@ public class ValidateDates {
 			}
 		} return true;
 	}
+	
 	//US04
-		public static boolean isMarriageBeforeDivorce(Family fam){
-			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
-			if(Validate.noNulls(fam.getMarrDate(),fam.getDivorceDate())){
-				if(fam.getMarrDate().compareTo(fam.getDivorceDate())>0){
-					LOGGER.log(Level.SEVERE,"FAMILY: US04: "+fam.getId() +": Divorce "+ dt.format(fam.getDivorceDate())+" before Marriage " + dt.format(fam.getMarrDate())+ " of Spouses");
-					return false;
-				}
-			}else if(Validate.noNulls(fam.getDivorceDate())&& Validate.allNulls(fam.getMarrDate())){
-				LOGGER.log(Level.SEVERE,"FAMILY: US04: "+fam.getId() +": Marriage should happen before Divorce " + dt.format(fam.getDivorceDate())+ " of Spouses");
+	public static boolean isMarriageBeforeDivorce(Family fam){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		if(Validate.noNulls(fam.getMarrDate(),fam.getDivorceDate())){
+			if(fam.getMarrDate().compareTo(fam.getDivorceDate())>0){
+				LOGGER.log(Level.SEVERE,"FAMILY: US04: "+fam.getId() +": Divorce "+ dt.format(fam.getDivorceDate())+" before Marriage " + dt.format(fam.getMarrDate())+ " of Spouses");
 				return false;
 			}
-			return true;
+		}else if(Validate.noNulls(fam.getDivorceDate())&& Validate.allNulls(fam.getMarrDate())){
+			LOGGER.log(Level.SEVERE,"FAMILY: US04: "+fam.getId() +": Marriage should happen before Divorce " + dt.format(fam.getDivorceDate())+ " of Spouses");
+			return false;
 		}
+		return true;
+	}
 	
+	//US05
+	public static boolean isMarriageBeforeDeath(Family fam){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		if(Validate.noNulls(fam.getMarrDate())){
+			if(Validate.noNulls(fam.getHusband().getDeathDate())){
+				if(fam.getHusband().getDeathDate().compareTo(fam.getMarrDate()) > 0){
+					LOGGER.log(Level.SEVERE,"FAMILY: US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
+					return false;
+				}
+			}
+			
+			if(Validate.noNulls(fam.getWife().getDeathDate())){
+				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) > 0){
+					LOGGER.log(Level.SEVERE,"FAMILY: US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	//US06
+	public static boolean isDivorceBeforeDeath(Family fam){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		if(Validate.noNulls(fam.getDivorceDate())){
+			if(Validate.noNulls(fam.getHusband().getDeathDate())){
+				if(fam.getHusband().getDeathDate().compareTo(fam.getDivorceDate()) > 0){
+					LOGGER.log(Level.SEVERE,"FAMILY: US06: " + fam.getId() + ": Divorced "+ dt.format(fam.getDivorceDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
+					return false;
+				}
+			}
+			
+			if(Validate.noNulls(fam.getWife().getDeathDate())){
+				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) > 0){
+					LOGGER.log(Level.SEVERE,"FAMILY: US05: " + fam.getId() + ": Divored "+ dt.format(fam.getDivorceDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
+					return false;
+				}
+			}
+		}
+		return true;
+	}	
 	
 	public static void validateIndividualDates(Individual indi) throws Exception{
-		
+		//US01
 		isDeathBeforeCurrent(indi);
 		isBirthBeforeCurrent(indi);
+		//US03
 		isBirthBeforeDeath(indi);
 	}
 	
@@ -144,6 +192,7 @@ public class ValidateDates {
 	}
 	
 }
+
 class MyFormatter extends Formatter{
 
 	@Override
