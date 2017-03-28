@@ -16,6 +16,8 @@ import edu.stevens.cs555.utils.ValidateDates;
 public class TestCaseforDates {
 
 	Family fam = new Family();
+	Individual hus = new Individual();
+	Individual wif = new Individual();
 	Individual indo = new Individual();
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 	
@@ -81,7 +83,7 @@ public class TestCaseforDates {
 		String divorce = "3048-NOV-11";
 		
 		try{
-			fam.setMarrDate(dt.parse(divorce));
+			fam.setDivorceDate(dt.parse(divorce));
 		} catch (ParseException e){
 			e.printStackTrace();
 		}
@@ -94,6 +96,8 @@ public class TestCaseforDates {
 		String birth="2010-DEC-16";
 		String marriage ="2010-DEC-16";
 		try {
+			fam.setHusband(hus);
+			fam.setWife(wif);
 			fam.getHusband().setBirthDate(dt.parse(birth));
 			fam.getWife().setBirthDate(dt.parse(birth));
 			fam.setMarrDate(dt.parse(marriage));
@@ -109,6 +113,8 @@ public class TestCaseforDates {
 		String birth="2010-DEC-20";
 		String marriage ="2010-DEC-16";
 		try {
+			fam.setHusband(hus);
+			fam.setWife(wif);
 			fam.getHusband().setBirthDate(dt.parse(birth));
 			fam.getWife().setBirthDate(dt.parse(birth));
 			fam.setMarrDate(dt.parse(marriage));
@@ -175,6 +181,7 @@ public class TestCaseforDates {
 		}
 		assertFalse(ValidateDates.isMarriageBeforeDivorce(fam));
 	}
+	
 	@Test
 	public void testNoMarrDivor(){
 		String divorce ="2016-JAN-13";
@@ -203,17 +210,20 @@ public class TestCaseforDates {
 	//US05 TestCase
 	@Test
 	public void testMarrBeforeDeath(){
-		String marriage= "2016-AUG-10";
+		String marriage = "2016-AUG-10";
 		String death1 = "2014-JAN-24";
 		String death2 = "2018-FEB-18";
 		
 		try{
+			fam.setHusband(hus);
+			fam.setWife(wif);
 			fam.setMarrDate(dt.parse(marriage));
 			fam.getHusband().setDeathDate(dt.parse(death1));
 			fam.getWife().setDeathDate(dt.parse(death2));
 		}catch(ParseException e) {
 			e.printStackTrace();
 		}
+		
 		assertFalse(ValidateDates.isMarriageBeforeDeath(fam));
 	}
 	
@@ -225,12 +235,15 @@ public class TestCaseforDates {
 		String death2 = "2018-FEB-18";
 		
 		try{
+			fam.setHusband(hus);
+			fam.setWife(wif);
 			fam.setDivorceDate(dt.parse(divorce));
 			fam.getHusband().setDeathDate(dt.parse(death1));
 			fam.getWife().setDeathDate(dt.parse(death2));
 		}catch(ParseException e) {
 			e.printStackTrace();
 		}
+		
 		assertFalse(ValidateDates.isDivorceBeforeDeath(fam));
 	}
 	

@@ -49,15 +49,15 @@ public class ValidateDates {
 		
 		if(Validate.noNulls(fam.getDivorceDate())){
 			if(fam.getDivorceDate().compareTo(rn) > 0){
-				LOGGER.log(Level.SEVERE,"FAMILY: US01: Divorced "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getDivorceDate())+" after current date");
+				LOGGER.log(Level.SEVERE,"FAMILY: US01: Divorced " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getDivorceDate()) + " after current date");
 				return false;
 			}
-		} return true;
+		}
+		return true;
 	}
 	
 	//US02
 	public static boolean isMarrAfterBirth(Family fam){
-		Date rn = new Date();
 		
 		if(Validate.noNulls(fam.getMarrDate())){
 			if(fam.getHusband().getBirthDate().compareTo(fam.getMarrDate()) > 0){
@@ -79,7 +79,7 @@ public class ValidateDates {
 				LOGGER.log(Level.SEVERE,"FAMILY: US04: "+fam.getId() +": Divorce "+ dt.format(fam.getDivorceDate())+" before Marriage " + dt.format(fam.getMarrDate())+ " of Spouses");
 				return false;
 			}
-		}else if(Validate.noNulls(fam.getDivorceDate())&& Validate.allNulls(fam.getMarrDate())){
+		}else if(Validate.noNulls(fam.getDivorceDate()) && Validate.allNulls(fam.getMarrDate())){
 			LOGGER.log(Level.SEVERE,"FAMILY: US04: "+fam.getId() +": Marriage should happen before Divorce " + dt.format(fam.getDivorceDate())+ " of Spouses");
 			return false;
 		}
@@ -91,14 +91,14 @@ public class ValidateDates {
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 		if(Validate.noNulls(fam.getMarrDate())){
 			if(Validate.noNulls(fam.getHusband().getDeathDate())){
-				if(fam.getHusband().getDeathDate().compareTo(fam.getMarrDate()) > 0){
+				if(fam.getHusband().getDeathDate().compareTo(fam.getMarrDate()) < 0){
 					LOGGER.log(Level.SEVERE,"FAMILY: US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
 					return false;
 				}
 			}
 			
 			if(Validate.noNulls(fam.getWife().getDeathDate())){
-				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) > 0){
+				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) < 0){
 					LOGGER.log(Level.SEVERE,"FAMILY: US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
 					return false;
 				}
@@ -112,14 +112,14 @@ public class ValidateDates {
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 		if(Validate.noNulls(fam.getDivorceDate())){
 			if(Validate.noNulls(fam.getHusband().getDeathDate())){
-				if(fam.getHusband().getDeathDate().compareTo(fam.getDivorceDate()) > 0){
+				if(fam.getHusband().getDeathDate().compareTo(fam.getDivorceDate()) < 0){
 					LOGGER.log(Level.SEVERE,"FAMILY: US06: " + fam.getId() + ": Divorced "+ dt.format(fam.getDivorceDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
 					return false;
 				}
 			}
 			
 			if(Validate.noNulls(fam.getWife().getDeathDate())){
-				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) > 0){
+				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) < 0){
 					LOGGER.log(Level.SEVERE,"FAMILY: US05: " + fam.getId() + ": Divored "+ dt.format(fam.getDivorceDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
 					return false;
 				}
@@ -178,14 +178,14 @@ public class ValidateDates {
 	
 	public static void validateIndividualAndFamily(HashMap<String,Individual> individuals,HashMap<String,Family> families){
 		try{
-		for(Individual indi :individuals.values()){
-			
-			validateIndividualDates(indi);
+			for(Individual indi :individuals.values()){
+				
+				validateIndividualDates(indi);
+				}
+			for(Family fam : families.values()){
+				
+				validateFamilyDates(fam);
 			}
-		for(Family fam : families.values()){
-			
-			validateFamilyDates(fam);
-		}
 		}catch(Exception e){
 			e.printStackTrace();
 		}
