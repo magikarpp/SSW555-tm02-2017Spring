@@ -139,7 +139,7 @@ public class ValidateDates {
 			
 			if(Validate.noNulls(fam.getWife().getDeathDate())){
 				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) < 0){
-					LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US05: " + fam.getId() + ": Divored "+ dt.format(fam.getDivorceDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
+					LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US06: " + fam.getId() + ": Divored "+ dt.format(fam.getDivorceDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
 					return false;
 				}
 			}
