@@ -56,7 +56,7 @@ public class ValidateDates {
 		
 		if(Validate.noNulls(fam.getMarrDate())){
 			if(fam.getMarrDate().compareTo(rn) > 0){
-				LOGGER.log(Level.SEVERE, "ERROR: FAMILY: US01: Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate())+" after current date");
+				LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US01: " + fam.getId() + ": Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate())+" after current date");
 				return false;
 			}
 		} return true;
@@ -68,7 +68,7 @@ public class ValidateDates {
 		
 		if(Validate.noNulls(fam.getDivorceDate())){
 			if(fam.getDivorceDate().compareTo(rn) > 0){
-				LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US01: Divorced " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getDivorceDate()) + " after current date");
+				LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US01: " + fam.getId() + ": Divorced " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getDivorceDate()) + " after current date");
 				return false;
 			}
 		}
@@ -80,11 +80,11 @@ public class ValidateDates {
 		
 		if(Validate.noNulls(fam.getMarrDate())){
 			if(fam.getHusband().getBirthDate().compareTo(fam.getMarrDate()) > 0){
-				LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US02: Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate()) + " after husband's " + "(" + fam.getHusband().getId() + ") " + "birth on " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getHusband().getBirthDate()));
+				LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US02: " + fam.getId() + ": Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate()) + " after husband's " + "(" + fam.getHusband().getId() + ") " + "birth on " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getHusband().getBirthDate()));
 				return false;
 			}
 			if(fam.getWife().getBirthDate().compareTo(fam.getMarrDate()) > 0){
-				LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US02: Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate()) + " after wife's " + "(" + fam.getWife().getId() + ") " + "birth on " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getWife().getBirthDate()));
+				LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US02: Married "+ new SimpleDateFormat("yyyy-MMM-dd").format(fam.getMarrDate()) + " after wife's " + "(" + fam.getWife().getId() + ") " + "birth on " + new SimpleDateFormat("yyyy-MMM-dd").format(fam.getWife().getBirthDate()));
 				return false;
 			}
 		} return true;
@@ -95,11 +95,11 @@ public class ValidateDates {
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 		if(Validate.noNulls(fam.getMarrDate(),fam.getDivorceDate())){
 			if(fam.getMarrDate().compareTo(fam.getDivorceDate())>0){
-				LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US04: "+fam.getId() +": Divorce "+ dt.format(fam.getDivorceDate())+" before Marriage " + dt.format(fam.getMarrDate())+ " of Spouses");
+				LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US04: "+fam.getId() +": Divorce "+ dt.format(fam.getDivorceDate())+" before Marriage " + dt.format(fam.getMarrDate())+ " of Spouses");
 				return false;
 			}
 		}else if(Validate.noNulls(fam.getDivorceDate()) && Validate.allNulls(fam.getMarrDate())){
-			LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US04: "+fam.getId() +": Marriage should happen before Divorce " + dt.format(fam.getDivorceDate())+ " of Spouses");
+			LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US04: "+fam.getId() +": Marriage should happen before Divorce " + dt.format(fam.getDivorceDate())+ " of Spouses");
 			return false;
 		}
 		return true;
@@ -111,14 +111,14 @@ public class ValidateDates {
 		if(Validate.noNulls(fam.getMarrDate())){
 			if(Validate.noNulls(fam.getHusband().getDeathDate())){
 				if(fam.getHusband().getDeathDate().compareTo(fam.getMarrDate()) < 0){
-					LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
+					LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
 					return false;
 				}
 			}
 			
 			if(Validate.noNulls(fam.getWife().getDeathDate())){
 				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) < 0){
-					LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
+					LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US05: " + fam.getId() + ": Married "+ dt.format(fam.getMarrDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
 					return false;
 				}
 			}
@@ -132,14 +132,14 @@ public class ValidateDates {
 		if(Validate.noNulls(fam.getDivorceDate())){
 			if(Validate.noNulls(fam.getHusband().getDeathDate())){
 				if(fam.getHusband().getDeathDate().compareTo(fam.getDivorceDate()) < 0){
-					LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US06: " + fam.getId() + ": Divorced "+ dt.format(fam.getDivorceDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
+					LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US06: " + fam.getId() + ": Divorced "+ dt.format(fam.getDivorceDate())+" after husband's (" + fam.getHusband().getId() + ") death on " + dt.format(fam.getHusband().getDeathDate()));
 					return false;
 				}
 			}
 			
 			if(Validate.noNulls(fam.getWife().getDeathDate())){
 				if(fam.getWife().getDeathDate().compareTo(fam.getMarrDate()) < 0){
-					LOGGER.log(Level.SEVERE,"ERROR: FAMILY: US06: " + fam.getId() + ": Divored "+ dt.format(fam.getDivorceDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
+					LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US06: " + fam.getId() + ": Divored "+ dt.format(fam.getDivorceDate())+" after wife's (" + fam.getWife().getId() + ") death on " + dt.format(fam.getWife().getDeathDate()));
 					return false;
 				}
 			}
@@ -153,7 +153,7 @@ public class ValidateDates {
 		if(Validate.noNulls(indi.getDeathDate())){
 			if(Validate.noNulls(indi.getBirthDate())){
 				if(indi.getDeathDate().compareTo(indi.getBirthDate())>150){
-					LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US07: "+indi.getId()+ ": More than 150 years old at death - Birth "+dt.format(indi.getBirthDate()+ ": Death "+dt.format(indi.getDeathDate())));
+					LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL:\t US07: "+indi.getId()+ ": More than 150 years old at death - Birth "+dt.format(indi.getBirthDate()+ ": Death "+dt.format(indi.getDeathDate())));
 				}
 				return false;
 			}
@@ -162,7 +162,7 @@ public class ValidateDates {
 			if(Validate.noNulls(indi.getBirthDate())){
 				Date currentDate = new Date();
 				if(currentDate.compareTo(indi.getBirthDate())>150){
-					LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US07: "+indi.getId()+ ": More than 150 years old - Birth "+dt.format(indi.getBirthDate()));
+					LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL:\t US07: "+indi.getId()+ ": More than 150 years old - Birth "+dt.format(indi.getBirthDate()));
 				}
 			}
 		}
@@ -184,7 +184,7 @@ public class ValidateDates {
 			for(int i = 0; i < fam.getChildren().size() - 1; i++){
 				if(Validate.noNulls(fam.getWife().getDeathDate())){
 					if(fam.getChildren().get(i).getBirthDate().compareTo(fam.getWife().getDeathDate()) > 0){
-						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US09: Birthdate of " + fam.getChildren().get(i).getName() + " (" + fam.getChildren().get(i).getId() +
+						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL:\t US09: Birthdate of " + fam.getChildren().get(i).getName() + " (" + fam.getChildren().get(i).getId() +
 								") (" + dt.format(fam.getChildren().get(i).getBirthDate()) + ") occurs after death of mother (" + fam.getWife().getId() + ") (" + fam.getWife().getDeathDate() + ")");
 						return false;
 					}
@@ -194,7 +194,7 @@ public class ValidateDates {
 					dtotal = fam.getChildren().get(i).getBirthDate().getTime() - fam.getHusband().getDeathDate().getTime();
 					dtotal = dtotal / (24 * 60 * 60 * 1000);
 					if(dtotal > 274){
-						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US09: Birthdate of " + fam.getChildren().get(i).getName() + " (" + fam.getChildren().get(i).getId() +
+						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL:\t US09: Birthdate of " + fam.getChildren().get(i).getName() + " (" + fam.getChildren().get(i).getId() +
 								") (" + dt.format(fam.getChildren().get(i).getBirthDate()) + ") occurs after 9 months after death of father (" + fam.getHusband().getId() + ") (" + fam.getHusband().getDeathDate() + ")");
 						return false;
 					}
@@ -215,13 +215,13 @@ public class ValidateDates {
 			dtotal1 = dtotal1 / (24 * 60 * 60 * 1000);
 			dtotal2 = dtotal2 / (24 * 60 * 60 * 1000);
 			if(dtotal1 < 5110){
-				LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US10: Marriage date of Family (" + fam.getId() + ") (" + dt.format(fam.getMarrDate()) + 
-						") must be 14 years after Husband's (" + fam.getHusband().getId() + ") birthdate (" + dt.format(fam.getHusband().getBirthDate()) + ")");
+				LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US10: " + fam.getId() + ": Marriage date of Family on " + dt.format(fam.getMarrDate()) + 
+						" must be 14 years after Husband's (" + fam.getHusband().getId() + ") birthdate on " + dt.format(fam.getHusband().getBirthDate()));
 				return false;
 			}
 			if(dtotal2 < 5110){
-				LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US10: Marriage date of Family (" + fam.getId() + ") (" + dt.format(fam.getMarrDate()) + 
-						") must be 14 years after Wife's (" + fam.getWife().getId() + ") birthdate (" + dt.format(fam.getWife().getBirthDate()) + ")");
+				LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US10: " + fam.getId() + ": Marriage date of Family on " + dt.format(fam.getMarrDate()) + 
+						" must be 14 years after Wife's (" + fam.getWife().getId() + ") birthdate on " + dt.format(fam.getWife().getBirthDate()));
 				return false;
 			}
 		}
@@ -244,7 +244,7 @@ public class ValidateDates {
 		
 		if(Validate.noNulls(indi.getDeathDate())){
 			if(indi.getDeathDate().compareTo(rn) > 0){
-			LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL: US01: "+indi.getId() +":  Death "+ new SimpleDateFormat("yyyy-MMM-dd").format(indi.getDeathDate())+" occurs in the future");
+			LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL:\t US01: "+indi.getId() +":  Death "+ new SimpleDateFormat("yyyy-MMM-dd").format(indi.getDeathDate())+" occurs in the future");
 			return false;
 			}
 		} return true;
@@ -255,7 +255,7 @@ public class ValidateDates {
 		Date rn = new Date();
 		
 		if(indi.getBirthDate().compareTo(rn) > 0){
-			LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL: US01: "+indi.getId() +":  Birthday "+ new SimpleDateFormat("yyyy-MMM-dd").format(indi.getBirthDate())+" occurs in the future");
+			LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL:\t US01: "+indi.getId() +": Birthday "+ new SimpleDateFormat("yyyy-MMM-dd").format(indi.getBirthDate())+" occurs in the future");
 			return false;
 		} return true;
 	}
@@ -265,12 +265,12 @@ public class ValidateDates {
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 		
 		if(Validate.allNulls(indi.getBirthDate())){
-			LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL: US03: "+indi.getId() +": Birthday is mandatory for any person to be alive.");
+			LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL:\t US03: "+indi.getId() +": Birthday is mandatory for any person to be alive.");
 			return false;
 		}
 		if(Validate.noNulls(indi.getDeathDate())){
 			if(indi.getBirthDate().compareTo(indi.getDeathDate())>0){
-				LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL: US03: "+indi.getId() +": Death "+ dt.format(indi.getDeathDate())+" before born " + dt.format(indi.getBirthDate()));
+				LOGGER.log(Level.SEVERE,"ERROR: INDIVIDUAL:\t US03: "+indi.getId() +": Death "+ dt.format(indi.getDeathDate())+" before born " + dt.format(indi.getBirthDate()));
 				return false;
 			}
 		}
