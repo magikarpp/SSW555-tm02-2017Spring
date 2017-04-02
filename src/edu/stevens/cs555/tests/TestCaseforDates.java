@@ -4,6 +4,8 @@ import static org.junit.Assert.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.junit.Test;
@@ -18,6 +20,8 @@ public class TestCaseforDates {
 	Family fam = new Family();
 	Individual hus = new Individual();
 	Individual wif = new Individual();
+	Individual child1 = new Individual();
+	ArrayList<Individual> children = new ArrayList<Individual>(Arrays.asList(child1));
 	Individual indo = new Individual();
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 	ValidateDates validator = new ValidateDates();
@@ -246,6 +250,47 @@ public class TestCaseforDates {
 		}
 		
 		assertFalse(validator.isDivorceBeforeDeath(fam));
+	}
+	
+	//US09 TestCase
+	@Test
+	public void testChildBirthBeforeParentDeath(){
+		String birth = "2018-FEB-18";
+		String death1 = "2018-JAN-24";
+		String death2 = "2018-FEB-19";
+		
+		try{
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setChildren(children);
+			fam.getChildren().get(0).setBirthDate(dt.parse(birth));
+			fam.getHusband().setDeathDate(dt.parse(death1));
+			fam.getWife().setDeathDate(dt.parse(death2));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		
+		assertTrue(validator.isChildBirthBeforeParentDeath(fam));
+	}
+	
+	//US10 TestCase
+	@Test
+	public void testMarriagebefore14(){
+		String marr = "2012-FEB-18";
+		String birth1 = "2018-JAN-24";
+		String birth2 = "2018-FEB-19";
+		
+		try{
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setMarrDate(dt.parse(marr));
+			fam.getHusband().setBirthDate(dt.parse(birth1));
+			fam.getWife().setBirthDate(dt.parse(birth2));
+		}catch(ParseException e) {
+			e.printStackTrace();
+		}
+		
+		assertFalse(validator.isMarriageAfter14(fam));
 	}
 	
 }

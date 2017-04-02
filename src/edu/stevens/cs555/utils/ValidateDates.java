@@ -43,6 +43,10 @@ public class ValidateDates {
 		isMarriageBeforeDeath(fam);
 		//US06
 		isDivorceBeforeDeath(fam);
+		//US09
+		isChildBirthBeforeParentDeath(fam);
+		//US10
+		isMarriageAfter14(fam);
 		
 	}
 	
@@ -165,10 +169,63 @@ public class ValidateDates {
 		
 		return true;
 	}
+	
 	//US08
 	public  boolean isChildBirthBeforeParentsMarr(Family fam){
 		
 		return true;	
+	}
+	
+	//US09
+	public boolean isChildBirthBeforeParentDeath(Family fam){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		long dtotal = 0;
+		if(Validate.noNulls(fam.getChildren())){
+			for(int i = 0; i < fam.getChildren().size() - 1; i++){
+				if(Validate.noNulls(fam.getWife().getDeathDate())){
+					if(fam.getChildren().get(i).getBirthDate().compareTo(fam.getWife().getDeathDate()) > 0){
+						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US09: Birthdate of " + fam.getChildren().get(i).getName() + " (" + fam.getChildren().get(i).getId() +
+								") (" + dt.format(fam.getChildren().get(i).getBirthDate()) + ") occurs after death of mother (" + fam.getWife().getId() + ") (" + fam.getWife().getDeathDate() + ")");
+						return false;
+					}
+				}
+				
+				if(Validate.noNulls(fam.getHusband().getDeathDate())){
+					dtotal = fam.getChildren().get(i).getBirthDate().getTime() - fam.getHusband().getDeathDate().getTime();
+					dtotal = dtotal / (24 * 60 * 60 * 1000);
+					if(dtotal > 274){
+						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US09: Birthdate of " + fam.getChildren().get(i).getName() + " (" + fam.getChildren().get(i).getId() +
+								") (" + dt.format(fam.getChildren().get(i).getBirthDate()) + ") occurs after 9 months after death of father (" + fam.getHusband().getId() + ") (" + fam.getHusband().getDeathDate() + ")");
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+	
+	//US10
+	public boolean isMarriageAfter14(Family fam){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		long dtotal1 = 0;
+		long dtotal2 = 0;
+		if(Validate.noNulls(fam.getHusband().getBirthDate(), fam.getWife().getBirthDate(), fam.getMarrDate())){
+			dtotal1 = fam.getMarrDate().getTime() - fam.getHusband().getBirthDate().getTime();
+			dtotal2 = fam.getMarrDate().getTime() - fam.getWife().getBirthDate().getTime();
+			dtotal1 = dtotal1 / (24 * 60 * 60 * 1000);
+			dtotal2 = dtotal2 / (24 * 60 * 60 * 1000);
+			if(dtotal1 < 5110){
+				LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US10: Marriage date of Family (" + fam.getId() + ") (" + dt.format(fam.getMarrDate()) + 
+						") must be 14 years after Husband's (" + fam.getHusband().getId() + ") birthdate (" + dt.format(fam.getHusband().getBirthDate()) + ")");
+				return false;
+			}
+			if(dtotal2 < 5110){
+				LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US10: Marriage date of Family (" + fam.getId() + ") (" + dt.format(fam.getMarrDate()) + 
+						") must be 14 years after Wife's (" + fam.getWife().getId() + ") birthdate (" + dt.format(fam.getWife().getBirthDate()) + ")");
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	public  void validateIndividualDates(Individual indi) throws Exception{
@@ -220,6 +277,7 @@ public class ValidateDates {
 		return true;	
 	}
 	
+	// End of US
 	
 	public  void validateIndividualAndFamily(HashMap<String,Individual> individuals,HashMap<String,Family> families){
 		try{
