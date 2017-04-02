@@ -20,6 +20,7 @@ public class TestCaseforDates {
 	Individual wif = new Individual();
 	Individual indo = new Individual();
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+	ValidateDates validator = new ValidateDates();
 	
 	public TestCaseforDates(){
 		fam.setId("F20");
@@ -49,7 +50,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertFalse(ValidateDates.isBirthBeforeCurrent(indo));
+		assertFalse(validator.isBirthBeforeCurrent(indo));
 	}
 	
 	@Test
@@ -62,7 +63,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertFalse(ValidateDates.isDeathBeforeCurrent(indo));
+		assertFalse(validator.isDeathBeforeCurrent(indo));
 	}
 	
 	@Test
@@ -75,7 +76,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertFalse(ValidateDates.isMarrBeforeCurrent(fam));
+		assertFalse(validator.isMarrBeforeCurrent(fam));
 	}
 	
 	@Test
@@ -88,7 +89,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertFalse(ValidateDates.isDivBeforeCurrent(fam));
+		assertFalse(validator.isDivBeforeCurrent(fam));
 	}
 	
 	@Test
@@ -105,7 +106,7 @@ public class TestCaseforDates {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue(ValidateDates.isMarrAfterBirth(fam));
+		assertTrue(validator.isMarrAfterBirth(fam));
 	}
 	
 	@Test
@@ -122,7 +123,7 @@ public class TestCaseforDates {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertFalse(ValidateDates.isMarrAfterBirth(fam));
+		assertFalse(validator.isMarrAfterBirth(fam));
 	}
 	
 	//USO3 TestCase
@@ -137,7 +138,7 @@ public class TestCaseforDates {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue(ValidateDates.isBirthBeforeDeath(indo));
+		assertTrue(validator.isBirthBeforeDeath(indo));
 		
 	}
 	@Test
@@ -151,7 +152,7 @@ public class TestCaseforDates {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertFalse(ValidateDates.isBirthBeforeDeath(indo));
+		assertFalse(validator.isBirthBeforeDeath(indo));
 		
 	}
 	@Test
@@ -165,7 +166,7 @@ public class TestCaseforDates {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue(ValidateDates.isBirthBeforeDeath(indo));
+		assertTrue(validator.isBirthBeforeDeath(indo));
 		
 	}
 	//US04 TestCase
@@ -179,7 +180,7 @@ public class TestCaseforDates {
 		}catch(ParseException e) {
 			e.printStackTrace();
 		}
-		assertFalse(ValidateDates.isMarriageBeforeDivorce(fam));
+		assertFalse(validator.isMarriageBeforeDivorce(fam));
 	}
 	
 	@Test
@@ -190,7 +191,7 @@ public class TestCaseforDates {
 		}catch(ParseException e) {
 			e.printStackTrace();
 		}
-		assertFalse(ValidateDates.isMarriageBeforeDivorce(fam));
+		assertFalse(validator.isMarriageBeforeDivorce(fam));
 	}
 	
 	@Test
@@ -204,7 +205,7 @@ public class TestCaseforDates {
 		}catch(ParseException e) {
 			e.printStackTrace();
 		}
-		assertTrue(ValidateDates.isMarriageBeforeDivorce(fam));
+		assertTrue(validator.isMarriageBeforeDivorce(fam));
 	}
 	
 	//US05 TestCase
@@ -224,7 +225,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertFalse(ValidateDates.isMarriageBeforeDeath(fam));
+		assertFalse(validator.isMarriageBeforeDeath(fam));
 	}
 	
 	//US06 TestCase
@@ -244,7 +245,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertFalse(ValidateDates.isDivorceBeforeDeath(fam));
+		assertFalse(validator.isDivorceBeforeDeath(fam));
 	}
 	
 }

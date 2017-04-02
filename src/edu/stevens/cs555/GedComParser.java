@@ -216,7 +216,6 @@ public class GedComParser {
 		long d = (1000*60*60*24);
 		long expectedDays=diff/d;
 		long years = (long) Math.floor(expectedDays/365.25);
-		
 		return (int) years;
 
 	}
@@ -321,7 +320,8 @@ public class GedComParser {
 		}
 		System.out.println();
 		System.out.println();
-		ValidateDates.validateIndividualAndFamily(individuals, families);
+		ValidateDates validator = new ValidateDates();
+		validator.validateIndividualAndFamily(individuals, families);
 	}
 
 }
