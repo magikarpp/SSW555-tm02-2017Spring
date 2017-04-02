@@ -23,10 +23,12 @@ import edu.stevens.cs555.utils.ValidateDates;
 
 public class GedComParser {	
 	
+	// individuals and families represent the collection of Individual and Family read from GEDCOM File. 
 	private static HashMap<String,Individual> individuals = new HashMap<String,Individual>();
 	private static HashMap<String,Family> families = new HashMap<String,Family>();
 	
 	public static void main(String[] args) throws Exception {
+		//Check for the gedcom file address passed as argument.
 		if(args.length!=1){
 			System.out.println("Please include the absolute file path as the first and only command line. Format: GedComParser < Ged File > ");
 			System.exit(0);
@@ -34,15 +36,13 @@ public class GedComParser {
 		try (BufferedReader br = new BufferedReader(new FileReader(args[0]))) {
 
 			String sCurrentLine;
-			
+			// Gets the tags from tags.txt which are important to capture from the file.
 			Set<String> eligibleTags = getEligibleTags();
 			Properties props = new Properties();
 			
-			
 			while ((sCurrentLine = br.readLine()) != null) {
 				
-				//System.out.println("line:\t" + sCurrentLine);
-				
+				// Reading each line and forming REGEX to match pattern and extract information from line. 
 				String REGEX = "(^\\d+)\\s(\\W?\\w+\\W?)\\s?(.*)";
 				Pattern p = Pattern.compile(REGEX);
 				Matcher m = p.matcher(sCurrentLine); //get a matcher object
@@ -53,7 +53,8 @@ public class GedComParser {
 		            //System.out.println("level:\t" + level);
 		            
 		            String tagName = m.group(2).trim();
-		            
+		            // Individual and Family comprise of different properties. 
+		            //Fetching its value and associating with appropriate object. 
 		            if(m.group(3)!=null){
 			            if(m.group(3).equals("INDI")||m.group(3).equals("FAM")) {
 			            	tagName = m.group(3);
@@ -74,6 +75,7 @@ public class GedComParser {
 			            	props.put(tagName, m.group(3));
 			            }
 		            }
+		            
 		            if(tagName.equals("BIRT")||tagName.equals("DEAT")||tagName.equals("DIV")||tagName.equals("MARR")){
 		            	sCurrentLine = br.readLine();
 		            	
@@ -91,6 +93,9 @@ public class GedComParser {
 				
 		        
 			}
+			// Logic is to save Individual and family & its properties after next such object arrives
+			// so the last object still remains to be added as after that we will not encounter object.
+			// adding the last object to the list.
 			if(props.size()>0){
 				if(props.containsKey("FAM")){
         			Family fam = getFamily(props);
@@ -206,11 +211,14 @@ public class GedComParser {
 	}
 	
 	private static int getAge(Date birthDate) {
-	    long ageInMillis = new Date().getTime() - birthDate.getTime();
+		Date dt1 = new Date();
+		long diff = dt1.getTime()- birthDate.getTime();	
+		long d = (1000*60*60*24);
+		long expectedDays=diff/d;
+		long years = (long) Math.floor(expectedDays/365.25);
+		
+		return (int) years;
 
-	    Date age = new Date(ageInMillis);
-
-	    return age.getYear();
 	}
 	private static Set<String> getEligibleTags() throws Exception {
 		Set<String> tags = new HashSet<>();

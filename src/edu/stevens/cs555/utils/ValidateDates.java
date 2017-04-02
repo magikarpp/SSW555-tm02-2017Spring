@@ -128,12 +128,42 @@ public class ValidateDates {
 		return true;
 	}	
 	
+	//US07
+	public static boolean isLessThan150Years(Individual indi){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		if(Validate.noNulls(indi.getDeathDate())){
+			if(Validate.noNulls(indi.getBirthDate())){
+				if(indi.getDeathDate().compareTo(indi.getBirthDate())>150){
+					LOGGER.log(Level.SEVERE, "INDIVIDUAL: US07: "+indi.getId()+ ": More than 150 years old at death - Birth "+dt.format(indi.getBirthDate()+ ": Death "+dt.format(indi.getDeathDate())));
+				}
+				return false;
+			}
+			
+		}else{
+			if(Validate.noNulls(indi.getBirthDate())){
+				Date currentDate = new Date();
+				if(currentDate.compareTo(indi.getBirthDate())>150){
+					LOGGER.log(Level.SEVERE, "INDIVIDUAL: US07: "+indi.getId()+ ": More than 150 years old - Birth "+dt.format(indi.getBirthDate()));
+				}
+			}
+		}
+		
+		return true;
+	}
+	//US08
+	public static boolean isChildBirthBeforeParentsMarr(Family fam){
+		
+		return true;	
+	}
+	
 	public static void validateIndividualDates(Individual indi) throws Exception{
 		//US01
 		isDeathBeforeCurrent(indi);
 		isBirthBeforeCurrent(indi);
 		//US03
 		isBirthBeforeDeath(indi);
+		//US07
+		isLessThan150Years(indi);
 	}
 	
 	//US01
