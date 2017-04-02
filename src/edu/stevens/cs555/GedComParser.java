@@ -71,8 +71,20 @@ public class GedComParser {
 			            	}
 			            	props.put(tagName,m.group(2));
 			            }else{
-			            	if(eligibleTags.contains(tagName))
-			            	props.put(tagName, m.group(3));
+			            	if(tagName.equals("CHIL")){
+			            		if(props.get("CHIL")!=null){
+			            			String children = props.get("CHIL").toString();
+			            			children += ","+ m.group(3);
+			            			props.put("CHIL", children);
+			            			
+			            		}else{
+			            			props.put(tagName, m.group(3));
+			            		}
+			            	}else{
+			            		if(eligibleTags.contains(tagName))
+					            	props.put(tagName, m.group(3));
+			            	}
+			            	
 			            }
 		            }
 		            
@@ -152,8 +164,11 @@ public class GedComParser {
 	        	fam.setWife(wife);
 	        	break;
 	        case "CHIL":
-	        	Individual child = individuals.get(value);
-	        	children.add(child);
+	        	String [] chil = value.split(",");
+	        	for(String ch : chil){
+	        		Individual child = individuals.get(ch);
+		        	children.add(child);
+	        	}
 	        	fam.setChildren(children);
 	        	break;
 	        		
@@ -311,8 +326,14 @@ public class GedComParser {
 			indent = "";
 			if(fam.getChildren()!=null){
 				List<Individual> children = fam.getChildren();
+				int count =0;
 				for(Individual child :children ){
+					
 					System.out.print(child.getId());
+					if(count<children.size()-1){
+						System.out.print(",");
+					}
+					count++;
 				}
 			}else{
 				System.out.print("NA \t");
