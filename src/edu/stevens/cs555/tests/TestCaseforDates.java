@@ -29,6 +29,9 @@ public class TestCaseforDates {
 	public TestCaseforDates(){
 		fam.setId("F20");
 		indo.setId("I12");
+		hus.setId("I01");
+		wif.setId("I02");
+		child1.setId("I03");
 	}
 	
 	

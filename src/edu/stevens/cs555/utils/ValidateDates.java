@@ -26,7 +26,6 @@ public class ValidateDates {
 		
 		LOGGER.addHandler(handler);
 		LOGGER.info("Logger Started");
-		
 	}
 	
 	 
