@@ -201,7 +201,7 @@ public class ValidateDates {
 					}else{
 						if(child.getBirthDate().compareTo(fam.getMarrDate())<0){
 
-							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY:\t US08: "+fam.getId()+": Child "+child.getId()+"born " +dt.format(child.getBirthDate())+" before marriage on "+dt.format(fam.getMarrDate()));
+							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY:\t US08: "+fam.getId()+": Child "+child.getId()+" born " +dt.format(child.getBirthDate())+" before marriage on "+dt.format(fam.getMarrDate()));
 							return false;
 						}
 					}
