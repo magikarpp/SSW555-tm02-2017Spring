@@ -195,18 +195,20 @@ public class ValidateDates {
 						nineMonthsAhead.add(Calendar.MONTH,9 );
 						long diff = nineMonthsAhead.getTimeInMillis() - child.getBirthDate().getTime();
 						if(diff<0){
-							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY: US08: "+fam.getId()+": Child "+child.getId()+" born " +dt.format(child.getBirthDate())+" after divorce on "+dt.format(fam.getDivorceDate()));
+							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY:\t US08: "+fam.getId()+": Child "+child.getId()+" born " + dt.format(child.getBirthDate())+" after divorce on "+dt.format(fam.getDivorceDate()));
 							return false;
 						}
 					}else{
 						if(child.getBirthDate().compareTo(fam.getMarrDate())<0){
-							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY: US08: "+fam.getId()+": Child "+child.getId()+" born " +dt.format(child.getBirthDate())+" before marriage on "+dt.format(fam.getMarrDate()));
+
+							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY:\t US08: "+fam.getId()+": Child "+child.getId()+"born " +dt.format(child.getBirthDate())+" before marriage on "+dt.format(fam.getMarrDate()));
 							return false;
 						}
 					}
 					
 				}else{
-					LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY: US08: "+fam.getId()+": Child "+child.getId()+" born " +dt.format(child.getBirthDate())+" without marriage.");
+
+					LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY:\t US08: "+fam.getId()+": Child "+child.getId()+" born " +dt.format(child.getBirthDate())+" without marriage.");
 					return false;
 				}
 			}
@@ -217,6 +219,7 @@ public class ValidateDates {
 	
 	//US09
 	public boolean isChildBirthBeforeParentDeath(Family fam){
+		/*
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 		long dtotal = 0;
 		if(Validate.noNulls(fam.getChildren())){
@@ -240,6 +243,32 @@ public class ValidateDates {
 				}
 			}
 		}
+		return true;
+		*/
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		if(Validate.noNulls(fam.getChildren())){
+			for(Individual child : fam.getChildren()){
+				if(Validate.noNulls(fam.getHusband().getDeathDate())){
+					Calendar nineMonthsAhead = Calendar.getInstance();
+					nineMonthsAhead.setTime(fam.getHusband().getDeathDate());
+					nineMonthsAhead.add(Calendar.MONTH, 9);
+					long diff = nineMonthsAhead.getTimeInMillis() - child.getBirthDate().getTime();
+					if(diff<0){
+						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL:\t US09: Birthdate of " + child.getName() + " (" + child.getId() +
+								") (" + dt.format(child.getBirthDate()) + ") occurs after 9 months after death of father (" + fam.getHusband().getId() + ") (" + dt.format(fam.getHusband().getDeathDate()) + ")");
+						return false;
+					}
+				}
+				if(Validate.noNulls(fam.getWife().getDeathDate())){
+					if(child.getBirthDate().compareTo(fam.getWife().getDeathDate()) > 0){
+						LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL:\t US09: Birthdate of " + child.getName() + " (" + child.getId() +
+								") (" + dt.format(child.getBirthDate()) + ") occurs after death of mother (" + fam.getWife().getId() + ") (" + dt.format(fam.getWife().getDeathDate()) + ")");
+						return false;
+					}
+				}
+			}
+		}
+		
 		return true;
 	}
 	

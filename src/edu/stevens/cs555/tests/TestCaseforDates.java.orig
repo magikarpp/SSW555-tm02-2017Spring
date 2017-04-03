@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import org.junit.Test;
@@ -26,15 +25,15 @@ public class TestCaseforDates {
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 	final ValidateDates validator = new ValidateDates();
 
-	
-	public TestCaseforDates(){
+	public TestCaseforDates() {
 		fam = new Family();
 		hus = new Individual();
 		wif = new Individual();
 		child1 = new Individual();
+		child1.setName("Test Child");
 		children.add(child1);
-		indo = new Individual(); 
-		
+		indo = new Individual();
+
 		fam.setId("F20");
 		hus.setId("I1");
 		wif.setId("I2");
@@ -42,77 +41,75 @@ public class TestCaseforDates {
 		indo.setId("I4");
 
 	}
-	
-	
-	
+
 	@Test
 	public void testDateNotNull() {
 		fam.setDivorceDate(new Date());
 		assertTrue(Validate.noNulls(fam.getDivorceDate()));
 	}
-	
+
 	@Test
-	public void testDateNull(){
+	public void testDateNull() {
 		assertFalse(Validate.noNulls(fam.getDivorceDate()));
 	}
-	
-	//USO1 TestCase
+
+	// USO1 TestCase
 	@Test
-	public void testBirthAfterCurrentDate(){
+	public void testBirthAfterCurrentDate() {
 		String birth = "3048-NOV-11";
-		
-		try{
+
+		try {
 			indo.setBirthDate(dt.parse(birth));
-		} catch (ParseException e){
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isBirthBeforeCurrent(indo));
 	}
-	
+
 	@Test
-	public void testDeathAfterCurrentDate(){
+	public void testDeathAfterCurrentDate() {
 		String death = "3048-NOV-11";
-		
-		try{
+
+		try {
 			indo.setDeathDate(dt.parse(death));
-		} catch (ParseException e){
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isDeathBeforeCurrent(indo));
 	}
-	
+
 	@Test
-	public void testMarrAfterCurrentDate(){
+	public void testMarrAfterCurrentDate() {
 		String marriage = "3048-NOV-11";
-		
-		try{
+
+		try {
 			fam.setMarrDate(dt.parse(marriage));
-		} catch (ParseException e){
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isMarrBeforeCurrent(fam));
 	}
-	
+
 	@Test
-	public void testDivAfterCurrentDate(){
+	public void testDivAfterCurrentDate() {
 		String divorce = "3048-NOV-11";
-		
-		try{
+
+		try {
 			fam.setDivorceDate(dt.parse(divorce));
-		} catch (ParseException e){
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isDivBeforeCurrent(fam));
 	}
-	
+
 	@Test
-	public void testBirthMarriageSameDay(){
-		String birth="2010-DEC-16";
-		String marriage ="2010-DEC-16";
+	public void testBirthMarriageSameDay() {
+		String birth = "2010-DEC-16";
+		String marriage = "2010-DEC-16";
 		try {
 			fam.setHusband(hus);
 			fam.setWife(wif);
@@ -125,11 +122,11 @@ public class TestCaseforDates {
 		}
 		assertTrue(validator.isMarrAfterBirth(fam));
 	}
-	
+
 	@Test
-	public void testBirthAfterMarriage(){
-		String birth="2010-DEC-20";
-		String marriage ="2010-DEC-16";
+	public void testBirthAfterMarriage() {
+		String birth = "2010-DEC-20";
+		String marriage = "2010-DEC-16";
 		try {
 			fam.setHusband(hus);
 			fam.setWife(wif);
@@ -142,12 +139,12 @@ public class TestCaseforDates {
 		}
 		assertFalse(validator.isMarrAfterBirth(fam));
 	}
-	
-	//USO3 TestCase
+
+	// USO3 TestCase
 	@Test
-	public void testBirthDeathSameDay(){
-		String birth="2016-OCT-25";
-		String death ="2016-OCT-25";
+	public void testBirthDeathSameDay() {
+		String birth = "2016-OCT-25";
+		String death = "2016-OCT-25";
 		try {
 			indo.setBirthDate(dt.parse(birth));
 			indo.setDeathDate(dt.parse(death));
@@ -156,12 +153,13 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		assertTrue(validator.isBirthBeforeDeath(indo));
-		
+
 	}
+
 	@Test
-	public void testBirthAfterDeath(){
-		String birth="2016-OCT-26";
-		String death ="2016-OCT-25";
+	public void testBirthAfterDeath() {
+		String birth = "2016-OCT-26";
+		String death = "2016-OCT-25";
 		try {
 			indo.setBirthDate(dt.parse(birth));
 			indo.setDeathDate(dt.parse(death));
@@ -170,12 +168,13 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		assertFalse(validator.isBirthBeforeDeath(indo));
-		
+
 	}
+
 	@Test
-	public void testBirthBeforeDeath(){
-		String birth="1989-SEP-13";
-		String death ="2016-OCT-25";
+	public void testBirthBeforeDeath() {
+		String birth = "1989-SEP-13";
+		String death = "2016-OCT-25";
 		try {
 			indo.setBirthDate(dt.parse(birth));
 			indo.setDeathDate(dt.parse(death));
@@ -184,139 +183,186 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		assertTrue(validator.isBirthBeforeDeath(indo));
-		
+
 	}
-	//US04 TestCase
+
+	// US04 TestCase
 	@Test
-	public void testDivorceBeforeMarr(){
-		String marriage="2016-AUG-10";
-		String divorce ="2016-JAN-13";
-		try{
+	public void testDivorceBeforeMarr() {
+		String marriage = "2016-AUG-10";
+		String divorce = "2016-JAN-13";
+		try {
 			fam.setMarrDate(dt.parse(marriage));
 			fam.setDivorceDate(dt.parse(divorce));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		assertFalse(validator.isMarriageBeforeDivorce(fam));
 	}
-	
+
 	@Test
-	public void testNoMarrDivor(){
-		String divorce ="2016-JAN-13";
-		try{
+	public void testNoMarrDivor() {
+		String divorce = "2016-JAN-13";
+		try {
 			fam.setDivorceDate(dt.parse(divorce));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		assertFalse(validator.isMarriageBeforeDivorce(fam));
 	}
-	
+
 	@Test
-	public void testMarrBeforeDivorce(){
-		
-		String marriage="2016-AUG-10";
-		String divorce ="2017-JAN-24";
-		try{
+	public void testMarrBeforeDivorce() {
+
+		String marriage = "2016-AUG-10";
+		String divorce = "2017-JAN-24";
+		try {
 			fam.setMarrDate(dt.parse(marriage));
 			fam.setDivorceDate(dt.parse(divorce));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
 		assertTrue(validator.isMarriageBeforeDivorce(fam));
 	}
-	
-	//US05 TestCase
+
+	// US05 TestCase
 	@Test
-	public void testMarrBeforeDeath(){
+	public void testMarrBeforeDeath() {
 		String marriage = "2016-AUG-10";
 		String death1 = "2014-JAN-24";
 		String death2 = "2018-FEB-18";
-		
-		try{
+
+		try {
 			fam.setHusband(hus);
 			fam.setWife(wif);
 			fam.setMarrDate(dt.parse(marriage));
 			fam.getHusband().setDeathDate(dt.parse(death1));
 			fam.getWife().setDeathDate(dt.parse(death2));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isMarriageBeforeDeath(fam));
 	}
-	
-	//US06 TestCase
+
+	// US06 TestCase
 	@Test
-	public void testDivBeforeDeath(){
-		String divorce= "2016-AUG-10";
+	public void testDivBeforeDeath() {
+		String divorce = "2016-AUG-10";
 		String death1 = "2014-JAN-24";
 		String death2 = "2018-FEB-18";
-		
-		try{
+
+		try {
 			fam.setHusband(hus);
 			fam.setWife(wif);
 			fam.setDivorceDate(dt.parse(divorce));
 			fam.getHusband().setDeathDate(dt.parse(death1));
 			fam.getWife().setDeathDate(dt.parse(death2));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isDivorceBeforeDeath(fam));
 	}
-	//US07 Testcase
+<<<<<<< HEAD
+
+	// US07 Testcase
+=======
+	//US07 TestCase
+>>>>>>> 44c7b5f4edd01b763bc75a995c0894eed103e9fb
 	@Test
-	public void testBirthLessThan150Years(){
-		String birth="1800-OCT-25";
-		
+	public void testBirthLessThan150Years() {
+		String birth = "1800-OCT-25";
+
 		try {
 			indo.setBirthDate(dt.parse(birth));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		assertTrue(validator.isLessThan150Years(indo));
+		assertFalse(validator.isLessThan150Years(indo));
 	}
-	
-	//US09 TestCase
 	@Test
-	public void testChildBirthBeforeParentDeath(){
-		String birth = "2018-FEB-18";
-		String death1 = "2018-JAN-24";
-		String death2 = "2018-FEB-19";
+	public void testDeathLessThan150Years() {
+		String birth = "1800-OCT-25";
+		String death = "2000-SEP-13";
+
+		try {
+			indo.setBirthDate(dt.parse(birth));
+			indo.setDeathDate(dt.parse(death));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertFalse(validator.isLessThan150Years(indo));
+	}
+	//US08 Testcase
+	@Test
+<<<<<<< HEAD
+	public void testChildBirthBeforeMarr(){
+		String marriage = "2016-AUG-10";
+		String childBirth ="2015-AUG-15";
 		
 		try{
+			fam.setMarrDate(dt.parse(marriage));
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setChildren(children);
+			fam.getChildren().get(0).setBirthDate(dt.parse(childBirth));
+		}catch(ParseException e){
+			e.printStackTrace();
+		}
+		assertFalse(validator.isChildBirthBeforeParentsMarr(fam));
+	}
+
+	// US09 TestCase
+	@Test
+	public void testChildBirthBeforeParentDeath() {
+		String birth = "2018-FEB-18";
+=======
+	public void testChildBirthBeforeParentDeath(){
+		String birth = "2018-FEB-20";
+>>>>>>> 44c7b5f4edd01b763bc75a995c0894eed103e9fb
+		String death1 = "2018-JAN-24";
+		String death2 = "2018-FEB-19";
+
+		try {
 			fam.setHusband(hus);
 			fam.setWife(wif);
 			fam.setChildren(children);
 			fam.getChildren().get(0).setBirthDate(dt.parse(birth));
 			fam.getHusband().setDeathDate(dt.parse(death1));
 			fam.getWife().setDeathDate(dt.parse(death2));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+<<<<<<< HEAD
+
 		assertTrue(validator.isChildBirthBeforeParentDeath(fam));
+=======
+		
+		assertFalse(validator.isChildBirthBeforeParentDeath(fam));
+>>>>>>> 44c7b5f4edd01b763bc75a995c0894eed103e9fb
 	}
-	
-	//US10 TestCase
+
+	// US10 TestCase
 	@Test
-	public void testMarriagebefore14(){
+	public void testMarriagebefore14() {
 		String marr = "2012-FEB-18";
 		String birth1 = "2018-JAN-24";
 		String birth2 = "2018-FEB-19";
-		
-		try{
+
+		try {
 			fam.setHusband(hus);
 			fam.setWife(wif);
 			fam.setMarrDate(dt.parse(marr));
 			fam.getHusband().setBirthDate(dt.parse(birth1));
 			fam.getWife().setBirthDate(dt.parse(birth2));
-		}catch(ParseException e) {
+		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
+
 		assertFalse(validator.isMarriageAfter14(fam));
 	}
-	
+
 }
