@@ -5,7 +5,6 @@ import static org.junit.Assert.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import org.junit.Test;
@@ -32,6 +31,7 @@ public class TestCaseforDates {
 		hus = new Individual();
 		wif = new Individual();
 		child1 = new Individual();
+		child1.setName("Test Child");
 		children.add(child1);
 		indo = new Individual(); 
 		
@@ -264,7 +264,7 @@ public class TestCaseforDates {
 		
 		assertFalse(validator.isDivorceBeforeDeath(fam));
 	}
-	//US07 Testcase
+	//US07 TestCase
 	@Test
 	public void testBirthLessThan150Years(){
 		String birth="1800-OCT-25";
@@ -281,7 +281,7 @@ public class TestCaseforDates {
 	//US09 TestCase
 	@Test
 	public void testChildBirthBeforeParentDeath(){
-		String birth = "2018-FEB-18";
+		String birth = "2018-FEB-20";
 		String death1 = "2018-JAN-24";
 		String death2 = "2018-FEB-19";
 		
@@ -296,7 +296,7 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		
-		assertTrue(validator.isChildBirthBeforeParentDeath(fam));
+		assertFalse(validator.isChildBirthBeforeParentDeath(fam));
 	}
 	
 	//US10 TestCase
