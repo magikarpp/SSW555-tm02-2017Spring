@@ -17,19 +17,31 @@ import edu.stevens.cs555.utils.ValidateDates;
 
 public class TestCaseforDates {
 
-	Family fam = new Family();
-	Individual hus = new Individual();
-	Individual wif = new Individual();
-	Individual child1 = new Individual();
-	ArrayList<Individual> children = new ArrayList<Individual>(Arrays.asList(child1));
-	Individual indo = new Individual();
+	Family fam = null;
+	Individual hus = null;
+	Individual wif = null;
+	Individual child1 = null;
+	ArrayList<Individual> children = new ArrayList<Individual>();
+	Individual indo = null;
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
-	ValidateDates validator = new ValidateDates();
+	final ValidateDates validator = new ValidateDates();
+
 	
 	public TestCaseforDates(){
+		fam = new Family();
+		hus = new Individual();
+		wif = new Individual();
+		child1 = new Individual();
+		children.add(child1);
+		indo = new Individual(); 
+		
 		fam.setId("F20");
-		indo.setId("I12");
+		hus.setId("I1");
+		wif.setId("I2");
+		child1.setId("I3");
+		indo.setId("I4");
 	}
+	
 	
 	
 	@Test
@@ -250,6 +262,19 @@ public class TestCaseforDates {
 		}
 		
 		assertFalse(validator.isDivorceBeforeDeath(fam));
+	}
+	//US07 Testcase
+	@Test
+	public void testBirthLessThan150Years(){
+		String birth="1800-OCT-25";
+		
+		try {
+			indo.setBirthDate(dt.parse(birth));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		assertTrue(validator.isLessThan150Years(indo));
 	}
 	
 	//US09 TestCase

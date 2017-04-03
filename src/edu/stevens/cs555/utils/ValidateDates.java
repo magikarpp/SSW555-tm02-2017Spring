@@ -1,6 +1,7 @@
 package edu.stevens.cs555.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.ConsoleHandler;
@@ -15,17 +16,8 @@ import edu.stevens.cs555.Individual;
 
 public class ValidateDates {
 	
-	private static Logger LOGGER = null;
+	private static final Logger LOGGER = SingletonLogger.getInstance();
 	public ValidateDates (){
-		LOGGER = Logger.getLogger(ValidateDates.class.getName());
-		LOGGER.setUseParentHandlers(false);
-		
-		MyFormatter formatter = new MyFormatter();
-		ConsoleHandler handler = new ConsoleHandler();
-		handler.setFormatter(formatter);
-		
-		LOGGER.addHandler(handler);
-		LOGGER.info("Logger Started");
 		
 	}
 	
@@ -43,6 +35,8 @@ public class ValidateDates {
 		isMarriageBeforeDeath(fam);
 		//US06
 		isDivorceBeforeDeath(fam);
+		//US08
+		isChildBirthBeforeParentsMarr(fam);
 		//US09
 		isChildBirthBeforeParentDeath(fam);
 		//US10
@@ -154,8 +148,9 @@ public class ValidateDates {
 			if(Validate.noNulls(indi.getBirthDate())){
 				if(indi.getDeathDate().compareTo(indi.getBirthDate())>150){
 					LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US07: "+indi.getId()+ ": More than 150 years old at death - Birth "+dt.format(indi.getBirthDate()+ ": Death "+dt.format(indi.getDeathDate())));
+					return false;
 				}
-				return false;
+				
 			}
 			
 		}else{
@@ -163,6 +158,7 @@ public class ValidateDates {
 				Date currentDate = new Date();
 				if(currentDate.compareTo(indi.getBirthDate())>150){
 					LOGGER.log(Level.SEVERE, "ERROR: INDIVIDUAL: US07: "+indi.getId()+ ": More than 150 years old - Birth "+dt.format(indi.getBirthDate()));
+					return false;
 				}
 			}
 		}
@@ -172,6 +168,32 @@ public class ValidateDates {
 	
 	//US08
 	public  boolean isChildBirthBeforeParentsMarr(Family fam){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		if(Validate.noNulls(fam.getChildren())){
+			for(Individual child : fam.getChildren()){
+				if(Validate.noNulls(fam.getMarrDate())){
+					if(Validate.noNulls(fam.getDivorceDate())){
+						Calendar nineMonthsAhead = Calendar.getInstance();
+						nineMonthsAhead.setTime(fam.getDivorceDate());
+						nineMonthsAhead.add(Calendar.MONTH,9 );
+						long diff = nineMonthsAhead.getTimeInMillis() - child.getBirthDate().getTime();
+						if(diff<0){
+							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY: US08: "+fam.getId()+": Child "+child.getId()+"born " +dt.format(child.getBirthDate())+" after divorce on"+dt.format(fam.getDivorceDate()));
+							return false;
+						}
+					}else{
+						if(child.getBirthDate().compareTo(fam.getMarrDate())<0){
+							LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY: US08: "+fam.getId()+": Child "+child.getId()+"born " +dt.format(child.getBirthDate())+" before marriage on"+dt.format(fam.getMarrDate()));
+							return false;
+						}
+					}
+					
+				}else{
+					LOGGER.log(Level.SEVERE,"ANOMALY: FAMILY: US08: "+fam.getId()+": Child "+child.getId()+"born " +dt.format(child.getBirthDate())+" without marriage.");
+					return false;
+				}
+			}
+		}
 		
 		return true;	
 	}
@@ -296,6 +318,29 @@ public class ValidateDates {
 	
 }
 
+class SingletonLogger {
+	private static Logger instance = null;
+	   protected  SingletonLogger() {
+		// Exists only to defeat instantiation.
+	} 
+	   public static Logger getInstance() {
+	      if(instance == null) {
+	         instance = Logger.getLogger(ValidateDates.class.getName());
+	         instance.setUseParentHandlers(false);
+	 		
+	 		MyFormatter formatter = new MyFormatter();
+	 		ConsoleHandler handler = new ConsoleHandler();
+	 		handler.setFormatter(formatter);
+	 		
+	 		instance.addHandler(handler);
+	         
+	      }
+	      return instance;
+	   }
+	
+	
+}
+
 class MyFormatter extends Formatter{
 
 	@Override
@@ -316,3 +361,4 @@ class MyFormatter extends Formatter{
     }
 	
 }
+
