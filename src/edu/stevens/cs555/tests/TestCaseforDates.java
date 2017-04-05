@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import org.junit.Test;
 
@@ -353,5 +354,117 @@ public class TestCaseforDates {
 
 		assertFalse(validator.isMarriageAfter14(fam));
 	}
-
+	//US11 Testcase
+	@Test
+	public void testBigamyWithoutDivorce(){
+		HashMap<String,Family> families =new HashMap<>();
+		String firstMarr ="2010-Apr-24";
+		String secondMarr ="2013-Feb-14";
+		
+		try {
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setMarrDate(dt.parse(firstMarr));
+			
+			Family fam2 = new Family();
+			fam2.setId("I6");
+			fam2.setHusband(hus);
+			fam2.setWife(indo);
+			fam2.setMarrDate(dt.parse(secondMarr));
+			families.put(fam.getId(), fam);
+			families.put(fam2.getId(), fam2);
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		assertFalse(validator.isBigamy(families));
+	}
+	@Test
+	public void testBigamyWithDivorce(){
+		HashMap<String,Family> families =new HashMap<>();
+		String firstMarr ="2010-Aug-15";
+		String secondMarr ="2013-May-14";
+		String firstDivorce ="2015-Jul-18";
+		
+		try {
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setMarrDate(dt.parse(firstMarr));
+			fam.setDivorceDate(dt.parse(firstDivorce));
+			
+			Family fam2 = new Family();
+			fam2.setId("I6");
+			fam2.setHusband(hus);
+			fam2.setWife(indo);
+			fam2.setMarrDate(dt.parse(secondMarr));
+			families.put(fam.getId(), fam);
+			families.put(fam2.getId(), fam2);
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		assertFalse(validator.isBigamy(families));
+	}
+	@Test
+	public void testBigamyWithManyMarriages(){
+		HashMap<String,Family> families =new HashMap<>();
+		String firstMarr ="2010-Jan-2";
+		String secondMarr ="2013-Oct-14";
+		String firstDivorce ="2015-Mar-25";
+		String thirdMarr ="2016-Sep-26";
+		
+		try {
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setMarrDate(dt.parse(firstMarr));
+			fam.setDivorceDate(dt.parse(firstDivorce));
+			
+			Family fam2 = new Family();
+			fam2.setId("I6");
+			fam2.setHusband(hus);
+			fam2.setWife(indo);
+			fam2.setMarrDate(dt.parse(secondMarr));
+			
+			Family fam3 = new Family();
+			fam3.setId("I7");
+			fam3.setHusband(hus);
+			Individual wife = new Individual();
+			wife.setId("I27");
+			fam3.setWife(wife);
+			fam3.setMarrDate(dt.parse(thirdMarr));
+			
+			families.put(fam.getId(), fam);
+			families.put(fam2.getId(), fam2);
+			families.put(fam3.getId(), fam3);
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		assertFalse(validator.isBigamy(families));
+	}
+	@Test
+	public void testParentsNotTooOld(){
+		String motherBirthDate ="1916-SEP-19";
+		String fatherBirthDate = "1910-JUL-18";
+		String childBirthdate ="2010-MAY-04";
+		
+		
+		try{
+			fam.setHusband(hus);
+			fam.setWife(wif);
+			fam.setChildren(children);
+			child1.setBirthDate(dt.parse(childBirthdate));
+			
+			
+			hus.setBirthDate(dt.parse(fatherBirthDate));
+			wif.setBirthDate(dt.parse(motherBirthDate));
+		
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertFalse(validator.isParentsTooOlder(fam));
+	}
 }

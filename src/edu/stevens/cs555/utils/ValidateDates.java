@@ -317,7 +317,7 @@ public class ValidateDates {
 						flag = false;
 					}
 					if(yearsFatherOlder > 80){
-						LOGGER.log(Level.SEVERE, "ERROR: FAMILY: US12: "+fam.getId()+": Father is more than 80 of age  "+yearsFatherOlder+ " older Date :"+dt.format(father.getBirthDate())+" then child  "+ child.getId()+" born on "+ dt.format(child.getBirthDate()));
+						LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US12: "+fam.getId()+": Father is more than 80 of age  "+yearsFatherOlder+ " older Date :"+dt.format(father.getBirthDate())+" then child  "+ child.getId()+" born on "+ dt.format(child.getBirthDate()));
 						flag= false;
 					}
 				}
@@ -377,7 +377,7 @@ public class ValidateDates {
 	}
 	
 	//US11 No bigamy
-	public boolean isBigamy(HashMap<String,Individual> individuals,HashMap<String,Family> families){
+	public boolean isBigamy(HashMap<String,Family> families){
 		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
 		HashMap<String,ArrayList<Family>> referenceMap = new HashMap();
 		for(Family fam : families.values()){
@@ -453,7 +453,7 @@ public class ValidateDates {
 				
 				validateFamilyDates(fam);
 			}
-			isBigamy(individuals, families);
+			isBigamy(families);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
