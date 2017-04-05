@@ -1,9 +1,12 @@
 package edu.stevens.cs555.utils;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
@@ -41,14 +44,14 @@ public class ValidateDates {
 		isChildBirthBeforeParentDeath(fam);
 		//US10
 		isMarriageAfter14(fam);
+		//US12
+		isParentsTooOlder(fam);
 		
 	}
 	private static long getDifference(long dt1, long dt2){
 		long diff;
-		if(dt1 > dt2){
 			diff = dt1-dt2;
-		}else
-			diff = dt2-dt1;
+		
 		return diff;
 	}
 	public static long year_between(Date dt1,Date dt2){
@@ -296,6 +299,34 @@ public class ValidateDates {
 		return true;
 	}
 	
+	//US12 Parents not too older
+		public boolean isParentsTooOlder(Family fam){
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+			
+			Individual mother = fam.getWife();
+			Individual father = fam.getHusband(); 
+			boolean flag = true;
+			if(Validate.noNulls(fam.getChildren())){
+				List<Individual> children = fam.getChildren();
+				for(Individual child : children){
+					long yearsMotherOlder = year_between(child.getBirthDate(), mother.getBirthDate()) ;
+					long yearsFatherOlder = year_between(child.getBirthDate(), father.getBirthDate());
+					
+					if(yearsMotherOlder > 60){
+						LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US12: "+fam.getId()+": Mother is more than 60 of age "+yearsMotherOlder+ " older Date :"+dt.format(mother.getBirthDate())+" then child  "+ child.getId()+" born on "+ dt.format(child.getBirthDate()));
+						flag = false;
+					}
+					if(yearsFatherOlder > 80){
+						LOGGER.log(Level.SEVERE, "ERROR: FAMILY: US12: "+fam.getId()+": Father is more than 80 of age  "+yearsFatherOlder+ " older Date :"+dt.format(father.getBirthDate())+" then child  "+ child.getId()+" born on "+ dt.format(child.getBirthDate()));
+						flag= false;
+					}
+				}
+			
+			}
+			
+			return flag;
+		}
+	
 	public  void validateIndividualDates(Individual indi) throws Exception{
 		//US01
 		isDeathBeforeCurrent(indi);
@@ -345,6 +376,71 @@ public class ValidateDates {
 		return true;	
 	}
 	
+	//US11 No bigamy
+	public boolean isBigamy(HashMap<String,Individual> individuals,HashMap<String,Family> families){
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+		HashMap<String,ArrayList<Family>> referenceMap = new HashMap();
+		for(Family fam : families.values()){
+			if(referenceMap.containsKey(fam.getHusband().getId())||referenceMap.containsKey(fam.getWife().getId())){
+				if(referenceMap.containsKey(fam.getHusband().getId())){
+					ArrayList<Family> famy = referenceMap.get(fam.getHusband().getId());
+					famy.add(fam);	
+				}
+				if(referenceMap.containsKey(fam.getWife().getId())){
+					ArrayList<Family> famy = referenceMap.get(fam.getWife().getId());
+					famy.add(fam);	
+				}
+			}else{
+				ArrayList<Family> husFamy = new ArrayList<Family>();
+				ArrayList<Family> wifFamy = new ArrayList<Family>();
+				
+				husFamy.add(fam);
+				wifFamy.add(fam);
+				
+				referenceMap.put(fam.getHusband().getId(), husFamy);
+				referenceMap.put(fam.getWife().getId(), wifFamy);
+			}
+			
+		}
+		boolean flag= true;
+		for(Map.Entry<String, ArrayList<Family>> entry  : referenceMap.entrySet()){
+			
+			if(entry.getValue().size()>1){
+				ArrayList<Family> manyFamily = entry.getValue();
+				for(int i=0;i<manyFamily.size();i++){
+					Family fam1 = manyFamily.get(i);
+					for(int j=i+1;j<manyFamily.size();j++){
+						Family fam2 = manyFamily.get(j);
+						Family firstMarr = null;
+						Family secondMarr = null;
+						if(Validate.noNulls(fam1.getMarrDate(),fam2.getMarrDate())){
+							if(fam1.getMarrDate().compareTo(fam2.getMarrDate())>0){
+								firstMarr = fam2;
+								secondMarr = fam1;
+							}else if(fam2.getMarrDate().compareTo(fam1.getMarrDate())>0){
+								firstMarr = fam1;
+								secondMarr = fam2;
+							}
+						}
+						if(Validate.noNulls(firstMarr.getDivorceDate())){
+							if(firstMarr.getDivorceDate().compareTo(secondMarr.getMarrDate())>0){
+								LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US11: "+entry.getKey() +": Individual has performed illegal mariage on "+dt.format(secondMarr.getMarrDate()) + " before divorce on "+dt.format(firstMarr.getDivorceDate()));
+								flag=false;
+							}
+						}else{
+							LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US11: "+entry.getKey() +": Individual has performed illegal mariage on "+dt.format(secondMarr.getMarrDate()) + " without taking divorce");
+							flag = false;
+						}
+						
+					}
+				}
+			}
+		}
+		return flag;
+		
+	}
+	
+	
 	// End of US
 	
 	public  void validateIndividualAndFamily(HashMap<String,Individual> individuals,HashMap<String,Family> families){
@@ -357,6 +453,7 @@ public class ValidateDates {
 				
 				validateFamilyDates(fam);
 			}
+			isBigamy(individuals, families);
 		}catch(Exception e){
 			e.printStackTrace();
 		}
