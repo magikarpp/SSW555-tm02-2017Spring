@@ -46,6 +46,10 @@ public class ValidateDates {
 		isMarriageAfter14(fam);
 		//US12
 		isParentsTooOlder(fam);
+		//US13
+		isSiblingsAgeApart(fam);
+		//US14
+		isLessThan5SameBirths(fam);
 		
 	}
 	private static long getDifference(long dt1, long dt2){
@@ -325,6 +329,61 @@ public class ValidateDates {
 			}
 			
 			return flag;
+		}
+		
+		//US13
+		public boolean isSiblingsAgeApart(Family fam){
+			SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
+			if(Validate.noNulls(fam.getChildren())){
+				if(fam.getChildren().size() >= 2){
+					for(Individual child1 : fam.getChildren()){
+						for(Individual child2 : fam.getChildren()){
+							if(child1 != child2){
+								if(child1.getBirthDate().compareTo(child2.getBirthDate()) < 0){
+									Calendar eightMonthsAhead = Calendar.getInstance();
+									eightMonthsAhead.setTime(child1.getBirthDate());
+									eightMonthsAhead.add(Calendar.MONTH, 8);
+									long diff1 = eightMonthsAhead.getTimeInMillis() - child2.getBirthDate().getTime();
+									Calendar twoDaysAhead = Calendar.getInstance();
+									twoDaysAhead.setTime(child1.getBirthDate());
+									twoDaysAhead.add(Calendar.DAY_OF_YEAR, 2);
+									long diff2 = twoDaysAhead.getTimeInMillis() - child2.getBirthDate().getTime();
+									if(diff1 > 0){
+										if(diff2 < 0){
+											LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US13: " + fam.getId() + ": Sibiling (" + child1.getId() + " and " + child2.getId() + ") are born within 8 months and more than 2 days of each other.");
+											return false;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			return true;
+		}
+		
+		//US14
+		public boolean isLessThan5SameBirths(Family fam){
+			HashMap<Date, Integer> dupes = new HashMap<Date, Integer>();
+			if(Validate.noNulls(fam.getChildren())){
+				if(fam.getChildren().size() >= 5){
+					for(Individual child : fam.getChildren()){
+						Date temp = child.getBirthDate();
+						if(dupes.containsKey(temp)){
+							dupes.put(temp, dupes.get(temp) + 1);
+							if(dupes.get(temp) > 5){
+								LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US14: " + fam.getId() + ": More than 5 siblings have the same birthday.");
+								return false;
+							}
+						}else{
+							dupes.put(temp, 1);
+						}
+					}
+				}
+			}
+			
+			return true;
 		}
 	
 	public  void validateIndividualDates(Individual indi) throws Exception{

@@ -257,7 +257,7 @@ public class GedComParser {
 			String indent = "";
 			System.out.println();
 			System.out.print(indi.getId()+"\t\t");
-			int total = (int) Math.ceil((double)15/indi.getName().length());
+			int total = (int) Math.ceil((double)16/indi.getName().length());
 			for(int i = 0; i < total; i++){
 				indent += "\t";
 			}
@@ -311,14 +311,14 @@ public class GedComParser {
 				System.out.print(formattedDate.format(fam.getDivorceDate())+"\t\t");
 			}
 			Individual husb = fam.getHusband();
-			int total = (int) Math.ceil((double)15/husb.getName().length());
+			int total = (int) Math.ceil((double)16/husb.getName().length());
 			for(int i = 0; i < total; i++){
 				indent += "\t";
 			}
 			System.out.print(husb.getId()+"\t\t\t"+husb.getName()+"\t"+indent);
 			indent = "";
 			Individual wife = fam.getWife();
-			total = (int) Math.ceil((double)15/wife.getName().length());
+			total = (int) Math.ceil((double)16/wife.getName().length());
 			for(int i = 0; i < total; i++){
 				indent += "\t";
 			}

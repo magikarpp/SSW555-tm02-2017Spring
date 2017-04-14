@@ -21,6 +21,8 @@ public class TestCaseforDates {
 	Individual hus = null;
 	Individual wif = null;
 	Individual child1 = null;
+	Individual child2 = null;
+	Individual child3 = null;
 	ArrayList<Individual> children = new ArrayList<Individual>();
 	Individual indo = null;
 	SimpleDateFormat dt = new SimpleDateFormat("yyyy-MMM-dd");
@@ -31,14 +33,20 @@ public class TestCaseforDates {
 		hus = new Individual();
 		wif = new Individual();
 		child1 = new Individual();
+		child2 = new Individual();
+		child3 = new Individual();
 		child1.setName("Test Child");
 		children.add(child1);
+		children.add(child2);
+		children.add(child3);
 		indo = new Individual();
 
 		fam.setId("F20");
 		hus.setId("I1");
 		wif.setId("I2");
 		child1.setId("I3");
+		child2.setId("I5");
+		child3.setId("I6");
 		indo.setId("I4");
 
 	}
@@ -466,5 +474,42 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		assertFalse(validator.isParentsTooOlder(fam));
+	}
+	
+	//US13
+	@Test
+	public void TestSiblingAgeSpacing(){
+		String s1 ="1990-SEP-19";
+		String s2 = "1990-SEP-28";
+		String s3 ="1889-MAY-04";
+		
+		try{
+			fam.setChildren(children);
+			child1.setBirthDate(dt.parse(s1));
+			child2.setBirthDate(dt.parse(s2));
+			child3.setBirthDate(dt.parse(s3));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertFalse(validator.isSiblingsAgeApart(fam));
+	}
+	
+	//US14
+	@Test
+	public void Test5SiblingAge(){
+		String s1 ="1990-SEP-19";
+		try{
+			children.add(child1);
+			children.add(child2);
+			children.add(child3);
+			fam.setChildren(children);
+			child1.setBirthDate(dt.parse(s1));
+			child2.setBirthDate(dt.parse(s1));
+			child3.setBirthDate(dt.parse(s1));
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertFalse(validator.isLessThan5SameBirths(fam));
 	}
 }
