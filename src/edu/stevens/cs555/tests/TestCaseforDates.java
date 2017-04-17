@@ -37,8 +37,7 @@ public class TestCaseforDates {
 		child3 = new Individual();
 		child1.setName("Test Child");
 		children.add(child1);
-		children.add(child2);
-		children.add(child3);
+		
 		indo = new Individual();
 
 		fam.setId("F20");
@@ -484,6 +483,8 @@ public class TestCaseforDates {
 		String s3 ="1889-MAY-04";
 		
 		try{
+			children.add(child2);
+			children.add(child3);
 			fam.setChildren(children);
 			child1.setBirthDate(dt.parse(s1));
 			child2.setBirthDate(dt.parse(s2));
@@ -499,6 +500,7 @@ public class TestCaseforDates {
 	public void Test5SiblingAge(){
 		String s1 ="1990-SEP-19";
 		try{
+			
 			children.add(child1);
 			children.add(child2);
 			children.add(child3);
@@ -511,5 +513,48 @@ public class TestCaseforDates {
 			e.printStackTrace();
 		}
 		assertFalse(validator.isLessThan5SameBirths(fam));
+	}
+	//US15
+	@Test
+	public void testMaleLastname(){
+		try{
+		hus.setName("Scott Fischer");
+		fam.setHusband(hus);
+		
+		child1.setGender("F");
+		
+		child2.setName("John Workman");
+		child2.setGender("M");
+		
+		child3.setName("Russell Wick");
+		child3.setGender("M");
+		
+		children.add(child2);
+		children.add(child3);
+		
+		fam.setChildren(children);
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		assertFalse(validator.isMaleSameLastName(fam));
+	}
+	//US21
+	@Test
+	public void testCorrectGender(){
+		try{
+			hus.setGender("F");
+			hus.setName("Mary Kom");
+			fam.setHusband(hus);
+			
+			wif.setGender("M");
+			wif.setName("John Wick");
+			fam.setWife(wif);
+			
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		assertFalse(validator.isCorrectGenderRole(fam));
 	}
 }

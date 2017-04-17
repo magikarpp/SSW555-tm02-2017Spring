@@ -50,6 +50,10 @@ public class ValidateDates {
 		isSiblingsAgeApart(fam);
 		//US14
 		isLessThan5SameBirths(fam);
+		//US16
+		isMaleSameLastName(fam);
+		//US21
+		isCorrectGenderRole(fam);
 		
 	}
 	private static long getDifference(long dt1, long dt2){
@@ -385,7 +389,59 @@ public class ValidateDates {
 			
 			return true;
 		}
-	
+	//US16
+		public boolean isMaleSameLastName(Family fam){
+			String lastName;
+			Boolean flag = true;
+			
+			if(Validate.noNulls(fam.getHusband())){
+				Individual husb = fam.getHusband();
+				if(Validate.noNulls(husb.getName())){
+					String [] name =husb.getName().split(" ");
+					if(Validate.noNulls(name[1])){
+						lastName = name[1];
+						if(Validate.noNulls(fam.getChildren())){
+							for(Individual indi : fam.getChildren()){
+								if(indi.getGender().equals("M")){
+									if(Validate.noNulls(indi.getName())){
+										String [] childName =indi.getName().split(" ");
+										if(Validate.noNulls(childName[1])){
+											if(!lastName.equalsIgnoreCase(childName[1])){	
+												LOGGER.log(Level.SEVERE,"ERROR: FAMILY:\t US16: "+fam.getId()+": Male Family Member "+indi.getId()+ " "+indi.getName()+ " doesn't have the same last name as "+lastName);
+												flag = false;
+											}	
+										}
+									}
+								}
+							}
+						}
+					}
+				
+				}
+		
+			}
+			return flag;
+		}
+		//US21
+		public boolean isCorrectGenderRole(Family fam){
+			Boolean flag= true;
+			if(Validate.noNulls(fam.getHusband())){
+				Individual husb = fam.getHusband();
+				if(!husb.getGender().equals("M")){
+					LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US21: "+fam.getId()+": Husband "+husb.getId()+" "+husb.getName()+" has gender "+husb.getGender()+" in a family instead of Male 'M'");
+					flag = false;
+				}
+			}
+			if(Validate.noNulls(fam.getWife())){
+				Individual wife = fam.getWife();
+				if(!wife.getGender().equals("F")){
+					LOGGER.log(Level.SEVERE, "ERROR: FAMILY:\t US21: "+fam.getId()+": Wife "+wife.getId()+" "+wife.getName()+" has gender "+wife.getGender()+" in a family instead of Female 'F'");
+					flag = false;
+				}
+			}
+			return flag;
+		}
+		
 	public  void validateIndividualDates(Individual indi) throws Exception{
 		//US01
 		isDeathBeforeCurrent(indi);
