@@ -504,6 +504,9 @@ public class TestCaseforDates {
 			children.add(child1);
 			children.add(child2);
 			children.add(child3);
+			children.add(child1);
+			children.add(child2);
+			children.add(child3);
 			fam.setChildren(children);
 			child1.setBirthDate(dt.parse(s1));
 			child2.setBirthDate(dt.parse(s1));
